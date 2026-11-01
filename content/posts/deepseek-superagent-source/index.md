@@ -148,4 +148,3 @@ CI 结果没有发送者，默认也不发起新工作，只作为上下文送�
 | 先落库再执行 | Effects | [effects.ts](https://github.com/deepseek-ai/dsh-superagent-prototype/blob/6337fc823ce20251c8de8085948165c81aaa701e/src/app/effects.ts#L43) |
 | 发送回执 | Outbox | [outbox.ts](https://github.com/deepseek-ai/dsh-superagent-prototype/blob/6337fc823ce20251c8de8085948165c81aaa701e/src/app/outbox.ts#L26-L51) |
 
-资料访问日期：2026-11-01。本文由 AI 辅助研究与撰写。

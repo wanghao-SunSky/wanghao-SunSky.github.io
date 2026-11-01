@@ -38,6 +38,7 @@ for (const slug of readdirSync(dir)) {
   if ([...desc].length > 160) err('描述超过 160 字');
   const text = body.replace(/```[\s\S]*?```/g, '').replace(/`[^`]*`/g, '');
   if (/\*\*[^*\s][^*]*[）」”】]\*\*[^\s，。；：、）*]/.test(text)) err('加粗以中文右括号或引号结尾，紧接文字时 Markdown 不会渲染，改成把括号移到 ** 外');
+  if (/本文由\s*AI\s*辅助|本文(?:使用|借助)\s*AI\s*(?:辅助)?(?:研究|撰写|生成)/i.test(text)) err('正文含 AI 制作尾注，请移到内部记录');
   if (/\/Users\/|~\/\.codex|engineering-notes-workbench/.test(body)) err('正文含本机路径');
 }
 

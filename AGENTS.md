@@ -35,3 +35,5 @@ Do not write "verified" or "checked" unless a tool result in the current session
 ## Repository Changes
 
 Keep site code, content, examples, and docs separated. Add dependencies only when they solve a current requirement.
+
+公开文章不添加“本文由 AI 辅助研究与撰写”等制作声明、核查过程或检查通过报告；这些记录留在私有工作区。来源链接、影响结论的局限和示例性质照常保留。

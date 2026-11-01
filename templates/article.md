@@ -11,7 +11,7 @@ tags: []
 series:
 level: intermediate # beginner | intermediate | advanced
 evidence: [] # source | code | test | experiment | production | opinion
-aiAssisted: false
+aiAssisted: false # 内部元数据，不渲染成文章尾注
 canonical: ""
 cover: [] # 封面文字，默认 3 行，每行最多 6 个字，见 docs/title-cover-intro.md
 sources:
@@ -23,6 +23,8 @@ code:
   path: ""
 corrections: []
 ---
+
+<!-- 不添加 AI 辅助撰写尾注或制作过程报告。 -->
 
 <!-- 开头：第一句讲读者关心的事和作者的依据（读了哪个版本、跑了几次、用了多久）。前 100 字含主关键词，说清它是什么、能干什么。第一段结尾说清这篇回答哪几个问题。 -->
 
