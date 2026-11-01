@@ -16,12 +16,14 @@ const canonical = new URL(Astro.url.pathname, SITE.url).href;
 const image = new URL(ogImage ?? '/og/default.png', SITE.url).href;
 const cfToken = import.meta.env.PUBLIC_CF_BEACON_TOKEN;
 const googleVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
+const bingVerification = import.meta.env.PUBLIC_BING_SITE_VERIFICATION;
 const baiduVerification = import.meta.env.PUBLIC_BAIDU_SITE_VERIFICATION;
 ---
 <!doctype html>
 <html lang={SITE.lang}>
   <head>
     <meta charset="utf-8" />
+    {bingVerification && <meta name="msvalidate.01" content={bingVerification} />}
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
