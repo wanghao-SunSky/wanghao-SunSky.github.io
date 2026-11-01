@@ -411,3 +411,24 @@ flowchart TB
  C --> D[搜索引擎接入 正在做]
  D --> E[平台分发 未开始]
 ```
+
+## 2026-11-01 — 搜索引擎接入与抓取检查
+
+做了什么：Google 与 Bing 所有权验证完成；Google 首页和首篇实时测试均显示“网址可编入 Google 索引”，两页均已请求编入索引。Google 已提交 sitemap-index.xml 和直接页面清单 sitemap-0.xml；Bing 已提交 sitemap-index.xml，显示 Processing。增加 Bing 验证标记配置。
+
+为什么：Google 采用现有 HTML 标记入口；Bing 同样使用网页标记，无需授权读取 Google 账号其他站点。Google 地图索引读取失败后补交直接清单，以排除索引层的问题。
+
+问题和验证缺口：Google 两个地图暂时均显示无法读取，但直接 HTTP 检查为 200、XML 内容正常，尚未确认 Google 端失败原因，不能视为地图处理成功或已收录。Cloudflare 站点已创建、标识已配置且线上 HTML 含脚本；本机浏览器加载 static.cloudflareinsights.com/beacon.min.js 返回 ERR_CONNECTION_CLOSED，curl 同样 TLS 连接失败，后台浏览量仍为 0，未完成真实收数验证。百度账号要求补真实姓名、手机和邮箱验证码等资料，留给作者本人填写。平台分发尚未执行。
+
+构建验证：本地默认 Node 22.9 不满足 Astro 要求，改用本机已有 /usr/local/opt/node@22/bin 后构建成功，生成 7 页；Bing 标记的 GitHub Actions 部署成功。没有改系统 Node 配置。
+
+下一步：核对 Google 地图后续状态、从可加载统计脚本的网络确认收数；作者完成百度资料后继续验证。
+
+```mermaid
+flowchart TB
+ A[网站与首篇 已完成] --> B[统计收数验证 正在做]
+ B --> C[Google 与 Bing 验证 已完成]
+ C --> D[地图处理核对 正在做]
+ D --> E[百度接入 正在做]
+ E --> F[平台分发 未开始]
+```
