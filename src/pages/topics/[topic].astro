@@ -1,0 +1,24 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostList from '../../components/PostList.astro';
+import { SITE, TOPICS } from '../../data/site';
+import { getPublishedPosts, type Post } from '../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  return Object.keys(TOPICS)
+    .map((topic) => ({ params: { topic }, props: { posts: posts.filter((p) => p.data.topics.includes(topic)) } }))
+    .filter((x) => x.props.posts.length > 0);
+}
+
+interface Props { posts: Post[] }
+const { posts } = Astro.props;
+const t = TOPICS[Astro.params.topic!];
+---
+<Base title={`${t.name} | ${SITE.shortTitle}`} description={`SunSky 关于${t.name}的中文技术文章：${t.summary}。`}>
+  <main class="wrap">
+    <h1>{t.name}</h1>
+    <p>{t.summary}。按发布时间倒序排列。</p>
+    <PostList posts={posts} />
+  </main>
+</Base>

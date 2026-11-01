@@ -1,0 +1,17 @@
+---
+import Base from '../../layouts/Base.astro';
+import { SITE, TOPICS } from '../../data/site';
+import { getPublishedPosts } from '../../lib/posts';
+const posts = await getPublishedPosts();
+const count = (k: string) => posts.filter((p) => p.data.topics.includes(k)).length;
+---
+<Base title={`主题 | ${SITE.shortTitle}`} description="SunSky 的 AI Agent 工程笔记按主题分类：Agent 架构、工具调用、长期记忆、评测和安全。">
+  <main class="wrap">
+    <h1>主题</h1>
+    <div class="topics">
+      {Object.entries(TOPICS).map(([k, t]) => (
+        <div>{count(k) > 0 ? <a href={`/topics/${k}/`}>{t.name}</a> : <b>{t.name}</b>}<span>{t.summary} · {count(k)} 篇</span></div>
+      ))}
+    </div>
+  </main>
+</Base>

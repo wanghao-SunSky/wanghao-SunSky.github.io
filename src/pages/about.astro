@@ -1,0 +1,20 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE, AUTHOR } from '../data/site';
+---
+<Base title={`关于 | ${SITE.shortTitle}`} description="关于 SunSky 和这个 AI Agent 工程笔记：写什么、证据等级怎么理解、AI 辅助写作的说明和联系方式。">
+  <main class="wrap">
+    <article>
+      <h1>关于</h1>
+      <p>我是 SunSky，在做 AI Agent 工程。这里记录我读 Agent 源码、做实验和做项目时的判断，主题包括 Agent 架构、工具调用、长期记忆、评测和安全。</p>
+      <p>我也整理了 <a href="https://github.com/wanghao-SunSky/cs329z-chinese">斯坦福 CS329Z 中文教程</a>，并在 GitHub 上公开了 <a href="https://github.com/wanghao-SunSky/memory-agent">memory-agent</a> 等项目。</p>
+      <h2>证据怎么看</h2>
+      <p>每篇文章标题下方写明证据来自哪里。“读的是某个提交”表示我读了源码和文档、没有部署运行；做过实验或在项目里用过时会写清条件。没测过的结论会在文章的“用之前要知道的”一节单独说明。</p>
+      <h2>AI 辅助写作</h2>
+      <p>我用 AI 帮忙整理资料、起草和检查文字。观点和最终事实由我负责，关键说法都附原始链接，源码链接固定到具体提交。</p>
+      <h2>纠错和联系</h2>
+      <p>发现错误请在 <a href="https://github.com/wanghao-SunSky/wanghao-SunSky.github.io/issues">GitHub Issues</a> 提出。实质更正会写在文章底部的更正记录里。</p>
+      <p><a href={AUTHOR.github}>GitHub</a> · <a href={AUTHOR.x}>X</a> · <a href="/rss.xml">RSS</a></p>
+    </article>
+  </main>
+</Base>

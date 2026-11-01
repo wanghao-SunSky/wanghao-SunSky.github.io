@@ -1,0 +1,81 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { SITE, AUTHOR, TOPICS, TYPE_LABEL } from '../../data/site';
+import { getPublishedPosts, formatDate, readingMinutes, postUrl, type Post } from '../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  return posts.map((post, i) => ({
+    params: { slug: post.id },
+    props: { post, newer: posts[i - 1], older: posts[i + 1], all: posts },
+  }));
+}
+
+interface Props { post: Post; newer?: Post; older?: Post; all: Post[] }
+const { post, newer, older, all } = Astro.props;
+const d = post.data;
+const { Content, headings } = await render(post);
+const toc = headings.filter((h) => h.depth === 2);
+const url = `${SITE.url}${postUrl(post.id)}`;
+const ogImage = `/og/${post.id}.png`;
+const related = all
+  .filter((p) => p.id !== post.id && p.data.topics.some((t) => d.topics.includes(t)))
+  .slice(0, 3);
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: d.title,
+  description: d.description,
+  datePublished: d.publishedAt?.toISOString(),
+  dateModified: (d.updatedAt ?? d.publishedAt)?.toISOString(),
+  inLanguage: SITE.lang,
+  mainEntityOfPage: url,
+  image: `${SITE.url}${ogImage}`,
+  keywords: d.tags.join(', '),
+  author: { '@type': 'Person', name: AUTHOR.name, url: AUTHOR.github, sameAs: [AUTHOR.github, AUTHOR.x] },
+};
+---
+<Base title={`${d.title} | ${SITE.shortTitle}`} description={d.description} ogType="article" ogImage={ogImage} jsonLd={jsonLd}>
+  <div class="layout">
+    <main class="wrap">
+      <article>
+        <h1>{d.title}</h1>
+        <div class="meta">
+          <time datetime={d.publishedAt!.toISOString()}>{formatDate(d.publishedAt!)}</time>
+          {' · '}{TYPE_LABEL[d.type]}{' · '}约 {readingMinutes(post.body)} 分钟
+          {d.evidenceNote && <>{' · '}{d.evidenceNote}</>}
+        </div>
+        {toc.length > 2 && (
+          <details class="toc-m"><summary>目录</summary>{toc.map((h) => <a href={`#${h.slug}`}>{h.text}</a>)}</details>
+        )}
+        <Content />
+      </article>
+      <footer class="foot">
+        <p>
+          {d.updatedAt && d.publishedAt && formatDate(d.updatedAt) !== formatDate(d.publishedAt)
+            ? `更新于 ${formatDate(d.updatedAt)}。`
+            : `${formatDate(d.publishedAt!)} 首次发布。`}
+          首发于本站，转载请注明出处。发现错误可以在 <a href="https://github.com/wanghao-SunSky/wanghao-SunSky.github.io/issues">GitHub Issues</a> 提出。
+        </p>
+        {d.corrections.length > 0 && (
+          <><h3>更正记录</h3><ul>{d.corrections.map((c) => <li>{formatDate(c.date)}：{c.note}</li>)}</ul></>
+        )}
+        <h3>主题</h3>
+        <p>{d.topics.map((t, i) => <>{i > 0 && '、'}<a href={`/topics/${t}/`}>{TOPICS[t].name}</a></>)}</p>
+        {related.length > 0 && (
+          <><h3>相关文章</h3><p>{related.map((p) => <><a href={postUrl(p.id)}>{p.data.title}</a><br /></>)}</p></>
+        )}
+        {(newer || older) && (
+          <p>
+            {older && <>上一篇：<a href={postUrl(older.id)}>{older.data.title}</a><br /></>}
+            {newer && <>下一篇：<a href={postUrl(newer.id)}>{newer.data.title}</a></>}
+          </p>
+        )}
+      </footer>
+    </main>
+    {toc.length > 2 && (
+      <aside class="toc" aria-label="目录"><b>目录</b>{toc.map((h) => <a href={`#${h.slug}`}>{h.text}</a>)}</aside>
+    )}
+  </div>
+</Base>

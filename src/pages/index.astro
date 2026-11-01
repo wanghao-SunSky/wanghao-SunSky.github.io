@@ -1,0 +1,40 @@
+---
+import Base from '../layouts/Base.astro';
+import PostList from '../components/PostList.astro';
+import { SITE, AUTHOR, TOPICS } from '../data/site';
+import { getPublishedPosts } from '../lib/posts';
+
+const posts = await getPublishedPosts();
+// 文章少于 4 篇时不单独列“精选”，避免同一篇在首页出现两次
+const featured = posts.length >= 4 ? posts.filter((p) => p.data.featured).slice(0, 3) : [];
+const years = [...new Set(posts.map((p) => p.data.publishedAt!.getUTCFullYear()))];
+const usedTopics = new Set(posts.flatMap((p) => p.data.topics));
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: SITE.title,
+  url: `${SITE.url}/`,
+  inLanguage: SITE.lang,
+  author: { '@type': 'Person', name: AUTHOR.name, url: AUTHOR.github, sameAs: [AUTHOR.github, AUTHOR.x] },
+};
+---
+<Base title={SITE.title} description={SITE.description} jsonLd={jsonLd}>
+  <main class="wrap">
+    <section class="intro">
+      <h1>{SITE.title}</h1>
+      <p>我是 SunSky，在做 AI Agent 工程。这里记录我读源码、做实验和做项目时的判断，每篇都写明证据来自哪里。</p>
+      <div class="links">
+        <a href={AUTHOR.github}>GitHub</a><a href={AUTHOR.x}>X</a><a href="/rss.xml">RSS</a>
+      </div>
+    </section>
+    {featured.length > 0 && (<><div class="sec">精选</div><PostList posts={featured} /></>)}
+    {years.map((y) => (<><div class="sec">{y}</div><PostList posts={posts.filter((p) => p.data.publishedAt!.getUTCFullYear() === y)} /></>))}
+    {posts.length === 0 && <p>第一篇文章还在路上。</p>}
+    <div class="sec">主题</div>
+    <div class="topics">
+      {Object.entries(TOPICS).map(([key, t]) => (
+        <div>{usedTopics.has(key) ? <a href={`/topics/${key}/`}>{t.name}</a> : <b>{t.name}</b>}<span>{t.summary}</span></div>
+      ))}
+    </div>
+  </main>
+</Base>

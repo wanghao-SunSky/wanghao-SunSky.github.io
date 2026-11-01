@@ -1,0 +1,72 @@
+---
+import '../styles/global.css';
+import { SITE } from '../data/site';
+
+interface Props {
+  title: string;
+  description: string;
+  ogType?: 'website' | 'article';
+  ogImage?: string;
+  jsonLd?: Record<string, unknown>;
+  noindex?: boolean;
+}
+
+const { title, description, ogType = 'website', ogImage, jsonLd, noindex = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, SITE.url).href;
+const image = new URL(ogImage ?? '/og/default.png', SITE.url).href;
+const cfToken = import.meta.env.PUBLIC_CF_BEACON_TOKEN;
+const googleVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
+const baiduVerification = import.meta.env.PUBLIC_BAIDU_SITE_VERIFICATION;
+---
+<!doctype html>
+<html lang={SITE.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title={SITE.title} href="/rss.xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta property="og:site_name" content={SITE.title} />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={image} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image} />
+    {googleVerification && <meta name="google-site-verification" content={googleVerification} />}
+    {baiduVerification && <meta name="baidu-site-verification" content={baiduVerification} />}
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+  </head>
+  <body>
+    <header class="top">
+      <a class="name" href="/">{SITE.shortTitle}</a>
+      <nav aria-label="主导航">
+        <a href="/">文章</a>
+        <a href="/topics/">主题</a>
+        <a href="/about/">关于</a>
+        <a href="/rss.xml">RSS</a>
+      </nav>
+    </header>
+    <slot />
+    {
+      cfToken && (
+        <script
+          is:inline
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon={JSON.stringify({ token: cfToken })}
+        />
+      )
+    }
+  </body>
+</html>
