@@ -373,3 +373,23 @@ flowchart TD
   E --> F[建仓库和 Astro 网站 未开始]
   F --> G[首篇发布和平台分发 未开始]
 ```
+
+## 2026-11-01 — Astro 网站与 GitHub 仓库上线
+
+**做了什么。** 按视觉稿用 Astro（一个把 Markdown 文章生成静态网页的工具）搭好了网站，建了公开仓库 `wanghao-SunSky/wanghao-SunSky.github.io`，推送后由 GitHub Actions 自动构建并部署到 https://wanghao-sunsky.github.io/ 。仓库填了简介、主页链接和 12 个话题标签，README 重写成“这是什么、在哪看、怎么跑”。首篇 DeepSeek SuperAgent 放在 PR #1，合并就上线。平台分发材料放在私有工作区 `distribution/deepseek-superagent-source/`：一份和网站一致的通用正文、5 条 X 串推、各平台标题表。
+
+**为什么这样做。** 首篇单独走 PR，是因为合并等于公开发布，按约定要你单独确认；站点代码先上线，能先验证部署链路没问题。各平台发同一份正文，是上一阶段定下的规则，省去改写，也避免几份版本对不上。X 账号方案里有账号数据和交易内容的讨论，移回私有工作区；文档里引用私有文件的地方改成“私有记录”。
+
+**问题和缺口。** 仓库名是 `*.github.io` 时，GitHub 自动按旧方式（直接发布仓库文件）开了 Pages，第一次部署失败，已改成用 Actions 部署，之后部署成功。干净克隆里文章目录为空时内容检查会报错，已加占位文件修好。Cloudflare 统计还没接：需要你登录 Cloudflare 拿到站点 token，设成仓库变量 `CF_BEACON_TOKEN`。Search Console、Bing、百度要等首篇上线后再验证。IndexNow、外链检查还没实现。
+
+**下一步。** 你确认合并 PR #1 → 检查线上文章页 → 接 Cloudflare 统计 → Search Console 验证并提交 sitemap → 你手动发掘金、知乎、CSDN 和 X。
+
+```mermaid
+flowchart TB
+  A[架构与 SOP：已完成] --> B[写作 Agent 与风格库：已完成]
+  B --> C[网站视觉稿：已完成]
+  C --> D[Astro 网站与仓库：已完成]
+  D --> E[首篇发布 PR：等待确认]
+  E --> F[统计与搜索引擎验证：未开始]
+  F --> G[平台分发：未开始]
+```
