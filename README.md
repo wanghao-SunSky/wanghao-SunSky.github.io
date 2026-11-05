@@ -16,7 +16,7 @@ Chinese notes on AI Agent engineering: agent architecture, tool calling, agent m
 | 评测 | 评测设计、回归测试、可靠性，Harness Engineering |
 | Agent 安全 | 提示词注入、权限边界、谁的话算命令 |
 
-最新文章：[AI Agent 记忆系统：从 RAG 到长期记忆](https://wanghao-sunsky.github.io/posts/agent-memory-history/)。
+最新文章：[我怎么用 Agent 接管滴答清单：把 GTD、四象限和 Codex 串成日常工作流](https://wanghao-sunsky.github.io/posts/grok-bot-personal-workflow/)。
 
 文章列表见[网站首页](https://wanghao-sunsky.github.io/)。发现事实错误欢迎提 Issue，更正会写在文章末尾。
 
