@@ -16,7 +16,7 @@ Chinese notes on AI Agent engineering: agent architecture, tool calling, agent m
 | 评测 | 评测设计、回归测试、可靠性，Harness Engineering |
 | Agent 安全 | 提示词注入、权限边界、谁的话算命令 |
 
-最新文章：[Agent 工具调用演变史：从函数调用到代码编排](https://wanghao-sunsky.github.io/posts/agent-tool-evolution/)。
+最新文章：[Subagent 什么时候值得拆，怎么配合才不添乱](https://wanghao-sunsky.github.io/posts/subagent-best-practices/)。
 
 文章列表见[网站首页](https://wanghao-sunsky.github.io/)。发现事实错误欢迎提 Issue，更正会写在文章末尾。
 
