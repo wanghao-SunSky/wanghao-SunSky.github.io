@@ -6,6 +6,6 @@ export default defineConfig({
   trailingSlash: 'always',
   integrations: [sitemap()],
   markdown: {
-    shikiConfig: { theme: 'github-light' },
+    shikiConfig: { theme: 'css-variables' },
   },
 });

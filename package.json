@@ -3,8 +3,11 @@
   "type": "module",
   "private": true,
   "scripts": {
+    "fonts": "node scripts/build-fonts.mjs",
+    "predev": "npm run fonts",
     "dev": "astro dev",
-    "build": "node scripts/check-content.mjs && astro build",
+    "build": "npm run fonts && node scripts/check-content.mjs && astro build && npm run check:fonts",
+    "check:fonts": "node scripts/check-fonts.mjs",
     "og": "node scripts/og.mjs",
     "preview": "astro preview",
     "check:content": "node scripts/check-content.mjs"
@@ -16,5 +19,14 @@
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.4",
     "astro": "^7.3.8"
+  },
+  "devDependencies": {
+    "@ot-builder/io-bin-name": "^1.8.1",
+    "@ot-builder/io-bin-sfnt": "^1.8.1",
+    "@resvg/resvg-js": "^2.6.2",
+    "entities": "^9.0.0",
+    "fontkitten": "^1.0.3",
+    "subset-font": "^2.9.0",
+    "yaml": "^2.9.1"
   }
 }

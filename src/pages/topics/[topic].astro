@@ -18,7 +18,7 @@ const t = TOPICS[Astro.params.topic!];
 <Base title={`${t.name} | ${SITE.shortTitle}`} description={`SunSky 关于${t.name}的中文技术文章：${t.summary}。`}>
   <main class="wrap">
     <h1>{t.name}</h1>
-    <p>{t.summary}。按发布时间倒序排列。</p>
+    <p class="lede">{t.summary}。按发布时间倒序排列。</p>
     <PostList posts={posts} />
   </main>
 </Base>

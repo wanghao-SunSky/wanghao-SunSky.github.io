@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
-import { SITE } from '../data/site';
+import { SITE, AUTHOR } from '../data/site';
+import fontManifest from '../generated/font-manifest.json';
 
 interface Props {
   title: string;
@@ -14,6 +15,28 @@ interface Props {
 const { title, description, ogType = 'website', ogImage, jsonLd, noindex = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, SITE.url).href;
 const image = new URL(ogImage ?? '/og/default.png', SITE.url).href;
+const navigation = [
+  { href: '/', label: '文章' },
+  { href: '/topics/', label: '主题' },
+  { href: '/about/', label: '关于' },
+  { href: '/rss.xml', label: 'RSS' },
+];
+const { pathname } = Astro.url;
+function current(href: string) {
+  if (href === pathname) return 'page';
+  if (href === '/' && pathname.startsWith('/posts/')) return 'location';
+  if (href === '/topics/' && pathname.startsWith(href)) return 'location';
+}
+const fonts = fontManifest.files.map(({ url, hash, weight }) => ({ href: `${url}?v=${hash}`, weight }));
+const fontRules = fonts.map(({ href, weight }) => `
+  @font-face {
+    font-family: "Blog Serif SC";
+    src: url("${href}") format("woff2");
+    font-style: normal;
+    font-weight: ${weight};
+    font-display: swap;
+    unicode-range: U+201C-201D, U+2026, U+2E80-2EFF, U+3000-303F, U+3400-4DBF, U+4E00-9FFF, U+F900-FAFF, U+FE30-FE4F, U+FF00-FFEF;
+  }`).join('\n');
 const cfToken = import.meta.env.PUBLIC_CF_BEACON_TOKEN;
 const googleVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
 const bingVerification = import.meta.env.PUBLIC_BING_SITE_VERIFICATION;
@@ -25,6 +48,8 @@ const baiduVerification = import.meta.env.PUBLIC_BAIDU_SITE_VERIFICATION;
     <meta charset="utf-8" />
     {bingVerification && <meta name="msvalidate.01" content={bingVerification} />}
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {fonts.map(({ href }) => <link rel="preload" as="font" type="font/woff2" href={href} crossorigin="anonymous" />)}
+    <style is:inline set:html={fontRules} />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
@@ -50,16 +75,27 @@ const baiduVerification = import.meta.env.PUBLIC_BAIDU_SITE_VERIFICATION;
     {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
   </head>
   <body>
-    <header class="top">
-      <a class="name" href="/">{SITE.shortTitle}</a>
-      <nav aria-label="主导航">
-        <a href="/">文章</a>
-        <a href="/topics/">主题</a>
-        <a href="/about/">关于</a>
-        <a href="/rss.xml">RSS</a>
-      </nav>
+    <header class="nav">
+      <div class="nav-bar">
+        <a class="name" href="/">{SITE.shortTitle}</a>
+        <nav class="nav-links" aria-label="主导航">
+          {navigation.map(({ href, label }) => <a href={href} aria-current={current(href)}>{label}</a>)}
+        </nav>
+      </div>
     </header>
     <slot />
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-about">
+          <a class="footer-name" href="/">{SITE.shortTitle}</a>
+          <p>读 AI Agent 源码、做实验和做项目时的记录。</p>
+        </div>
+        <nav aria-label="页脚导航">
+          <div><h2>站内</h2>{navigation.map(({ href, label }) => <a href={href}>{label}</a>)}</div>
+          <div><h2>联系</h2><a href={AUTHOR.github}>GitHub</a><a href={AUTHOR.x}>X</a></div>
+        </nav>
+      </div>
+    </footer>
     {
       cfToken && (
         <script

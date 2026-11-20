@@ -27,10 +27,10 @@ const jsonLd = {
         <a href={AUTHOR.github}>GitHub</a><a href={AUTHOR.x}>X</a><a href="/rss.xml">RSS</a>
       </div>
     </section>
-    {featured.length > 0 && (<><div class="sec">精选</div><PostList posts={featured} /></>)}
-    {years.map((y) => (<><div class="sec">{y}</div><PostList posts={posts.filter((p) => p.data.publishedAt!.getUTCFullYear() === y)} /></>))}
+    {featured.length > 0 && (<section><h2 class="sec">精选</h2><PostList posts={featured} /></section>)}
+    {years.map((y) => (<section><h2 class="sec year">{y}</h2><PostList posts={posts.filter((p) => p.data.publishedAt!.getUTCFullYear() === y)} /></section>))}
     {posts.length === 0 && <p>第一篇文章还在路上。</p>}
-    <div class="sec">主题</div>
+    <h2 class="sec">主题</h2>
     <div class="topics">
       {Object.entries(TOPICS).map(([key, t]) => (
         <div>{usedTopics.has(key) ? <a href={`/topics/${key}/`}>{t.name}</a> : <b>{t.name}</b>}<span>{t.summary}</span></div>

@@ -1,38 +1,42 @@
-// 本地运行：node scripts/og.mjs
-// 读取每篇已发布文章的 cover 字段，用本机 Chrome 截成 1200×630 PNG，写到 public/og/。
-// 规则见 docs/title-cover-intro.md 和 docs/site-design.md。
-import { readFileSync, readdirSync, mkdirSync, writeFileSync, existsSync } from 'node:fs';
+import { existsSync } from 'node:fs';
+import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { tmpdir } from 'node:os';
-import { execFileSync } from 'node:child_process';
+import { Resvg } from '@resvg/resvg-js';
+import { escapeText } from 'entities';
+import { parse } from 'yaml';
+import { sourceForCover } from './build-fonts.mjs';
 
-const CHROME = process.env.CHROME ?? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
-const postsDir = 'content/posts';
-const outDir = 'public/og';
-mkdirSync(outDir, { recursive: true });
+const out = 'public/og';
+const font = await sourceForCover();
+await mkdir(out, { recursive: true });
 
-const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
-const page = (lines, site) => `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><style>
-html,body{margin:0;width:1200px;height:630px;background:#fff;color:#1f2328;overflow:hidden;font-family:-apple-system,"PingFang SC","Noto Sans SC",sans-serif}
-.c{padding:80px 96px;height:630px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between}
-.s{font-size:28px;color:#59636e;font-weight:500}.t{font-size:84px;line-height:1.25;font-weight:700}
-</style></head><body><div class="c"><div class="s">${esc(site)}</div><div class="t">${lines.map(esc).join('<br>')}</div><div></div></div></body></html>`;
-
-function shot(html, file) {
-  const tmp = join(tmpdir(), `og-${Date.now()}.html`);
-  writeFileSync(tmp, html);
-  execFileSync(CHROME, ['--headless=new', '--disable-gpu', '--hide-scrollbars', '--window-size=1200,630', `--screenshot=${file}`, `file://${tmp}`], { stdio: 'ignore' });
+async function cover(slug, site, lines) {
+  // The title block stays vertically centered for both two- and three-line covers.
+  const firstBaseline = 352 - (lines.length - 1) * 52;
+  const title = lines.map((line, index) =>
+    `<text x="96" y="${firstBaseline + index * 104}">${escapeText(line)}</text>`
+  ).join('');
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" xml:lang="zh-CN" width="1200" height="630">
+    <rect width="1200" height="630" fill="#fbfaf6"/>
+    <g font-family="Source Han Serif SC" font-weight="600">
+      <text x="96" y="109" fill="#1a6840" font-size="30">${escapeText(site)}</text>
+      <g fill="#363433" font-size="84">${title}</g>
+    </g>
+  </svg>`;
+  const png = new Resvg(svg, { font: { loadSystemFonts: false, fontFiles: [font] } }).render().asPng();
+  await writeFile(join(out, slug + '.png'), png);
+  console.log('og: ' + slug + '.png');
 }
 
-const site = 'SunSky · AI Agent 工程笔记';
-shot(page(['AI Agent', '工程笔记'], 'SunSky'), join(outDir, 'default.png'));
-for (const slug of readdirSync(postsDir)) {
-  const f = join(postsDir, slug, 'index.md');
-  if (!existsSync(f)) continue;
-  const fm = readFileSync(f, 'utf8').split('\n---')[0];
-  const m = fm.match(/^cover:\s*\[(.*)\]\s*$/m);
-  if (!m) { console.warn(`skip ${slug}: no cover`); continue; }
-  const lines = JSON.parse(`[${m[1]}]`);
-  shot(page(lines, site), join(outDir, `${slug}.png`));
-  console.log(`og: ${slug}.png`);
+await cover('default', 'SunSky', ['AI Agent', '工程笔记']);
+for (const entry of await readdir('content/posts', { withFileTypes: true })) {
+  if (!entry.isDirectory()) continue;
+  const file = join('content/posts', entry.name, 'index.md');
+  if (!existsSync(file)) continue;
+  const raw = await readFile(file, 'utf8');
+  const frontmatter = raw.match(/^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/);
+  if (!frontmatter) throw new Error('Missing frontmatter: ' + file);
+  const post = parse(frontmatter[1]);
+  if (!['published', 'corrected', 'deprecated'].includes(post.status)) continue;
+  if (post.cover?.length) await cover(entry.name, 'SunSky · AI Agent 工程笔记', post.cover);
 }

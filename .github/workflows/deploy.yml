@@ -21,10 +21,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+      - name: Cache source fonts
+        uses: actions/cache@v6
+        with:
+          path: .cache/fonts
+          key: source-fonts-${{ hashFiles('scripts/build-fonts.mjs') }}
       - name: Build
         uses: withastro/action@v6
         with:
           node-version: 22
+          build-cmd: npm run build
         env:
           PUBLIC_CF_BEACON_TOKEN: ${{ vars.CF_BEACON_TOKEN }}
           PUBLIC_GOOGLE_SITE_VERIFICATION: ${{ vars.GOOGLE_SITE_VERIFICATION }}

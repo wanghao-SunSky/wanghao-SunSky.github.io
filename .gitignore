@@ -4,3 +4,6 @@ dist/
 .DS_Store
 .env
 .env.*
+.cache/
+public/fonts/blog-serif-sc-*.woff2
+src/generated/font-manifest.json
