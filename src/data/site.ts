@@ -3,7 +3,7 @@ export const SITE = {
   title: 'SunSky 的 AI Agent 工程笔记',
   shortTitle: 'SunSky',
   description:
-    'SunSky 的中文技术博客：读 AI Agent 源码、做实验和做项目时的记录，主题包括 Agent 架构、工具调用、长期记忆、评测和安全。',
+    'SunSky 的 AI Agent 工程博客：3 年后端转 Agent 工程，记录拆解源码、划定工具与状态边界，以及重度 AI-Native 多模型协作的一线实战。',
   lang: 'zh-CN',
 };
 

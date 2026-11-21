@@ -1,6 +1,6 @@
 # SunSky 的 AI Agent 工程笔记
 
-中文 AI Agent 工程博客。我读 Agent 源码、做实验和做项目时，把判断写成文章，每篇都写明证据来自哪里：读了哪个提交的源码、跑没跑过、哪些是我的观点。
+中文 AI Agent 工程博客。3 年后端转 Agent 工程，重度 AI-Native 实践者——不写空泛概念，专注源码拆解、工具与状态边界、多模型协作与一线实战复盘。
 
 在线阅读：**[wanghao-sunsky.github.io](https://wanghao-sunsky.github.io/)** · [RSS](https://wanghao-sunsky.github.io/rss.xml) · 作者 [SunSky](https://github.com/wanghao-SunSky)（[X @sunsky1125](https://x.com/sunsky1125)）
 

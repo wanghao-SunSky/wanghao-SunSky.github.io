@@ -2,18 +2,18 @@
 import Base from '../layouts/Base.astro';
 import { SITE, AUTHOR } from '../data/site';
 ---
-<Base title={`关于 | ${SITE.shortTitle}`} description="关于 SunSky 和这个 AI Agent 工程笔记：写什么、证据等级怎么理解、AI 辅助写作的说明和联系方式。">
+<Base title={`关于 | ${SITE.shortTitle}`} description="关于 SunSky：3 年后端转 AI Agent 工程，重度 AI-Native 实践者，写源码拆解、工程边界与真实实战。">
   <main class="wrap">
     <article>
       <h1>关于</h1>
-      <p>我是 SunSky，在做 AI Agent 工程。这里记录我读 Agent 源码、做实验和做项目时的判断，主题包括 Agent 架构、工具调用、长期记忆、评测和安全。</p>
-      <p>我也整理了 <a href="https://github.com/wanghao-SunSky/cs329z-chinese">斯坦福 CS329Z 中文教程</a>，并在 GitHub 上公开了 <a href="https://github.com/wanghao-SunSky/memory-agent">memory-agent</a> 等项目。</p>
-      <h2>证据怎么看</h2>
-      <p>每篇文章标题下方写明证据来自哪里。“读的是某个提交”表示我读了源码和文档、没有部署运行；做过实验或在项目里用过时会写清条件。没测过的结论会在文章的“用之前要知道的”一节单独说明。</p>
-      <h2>AI 辅助写作</h2>
-      <p>我用 AI 帮忙整理资料、起草和检查文字。观点和最终事实由我负责，关键说法都附原始链接，源码链接固定到具体提交。</p>
-      <h2>纠错和联系</h2>
-      <p>发现错误请在 <a href="https://github.com/wanghao-SunSky/wanghao-SunSky.github.io/issues">GitHub Issues</a> 提出。实质更正会写在文章底部的更正记录里。</p>
+      <p>我是 SunSky，做了 3 年 Java 后端，现在专注 <strong>AI Agent 工程</strong>。我发自内心相信 AI 正在重写软件和生活，日常几乎把所有能交给 AI 的事都接进了多模型工作流——从系统迁移、源码拆解，到日程管理与日常杂事。</p>
+      <p>比起单次 Prompt 的灵光一现，我更在意<strong>用后端系统思维做 Agent</strong>：确定性代码和模型判断怎么划界、工具副作用与状态恢复怎么兜底、怎么用真实结果做验收。除了博客，我也维护开源的 <a href="https://github.com/wanghao-SunSky/cs329z-chinese">斯坦福 CS329Z 中文教程</a>，顺手做些自用效率工具。</p>
+      <h2>态度与原则</h2>
+      <ul>
+        <li><strong>只写有依据的判断</strong>：讨厌二手拼凑的概念科普。拆源码就标明提交记录，做实验就写清条件、适用范围和翻车点。</li>
+        <li><strong>和 AI 一起写，但自己把关</strong>：这个博客本身就是多模型协作的产物，但每条核心判断、源码路径与边界结论都经过我本人核验。</li>
+        <li><strong>随时欢迎纠错</strong>：技术和模型变化很快，发现事实偏差或有更好的解法，直接到 <a href="https://github.com/wanghao-SunSky/wanghao-SunSky.github.io/issues">GitHub Issues</a> 或 <a href={AUTHOR.x}>X</a> 聊，实质性更正会记在文章底部。</li>
+      </ul>
       <p><a href={AUTHOR.github}>GitHub</a> · <a href={AUTHOR.x}>X</a> · <a href="/rss.xml">RSS</a></p>
     </article>
   </main>
