@@ -487,3 +487,8 @@ A[发布准备 已完成] --> B[部署 正在做] --> C[线上核对 未开始]
 ## 2026-11-26 — 土豆姐与 pstack 互动图解导读页与配套专栏文章准备
 
 新增原生 Astro 6 章互动导读页 `src/pages/guides/pstack.astro`（路由 `/guides/pstack/`）及配套专栏文章 `content/posts/pstack-poteto-guide/index.md`（路由 `/posts/pstack-poteto-guide/`），复用本站妙言暖纸书卷风设计系统、双字重子集字体与自动 OG 分享图，完成内容校验、字库零缺字检查、Astro 全量构建与 Markdown 排版检查。
+
+
+## 2026-11-26 — 润色 pstack 专栏语感并补齐互动页术语浮卡与代码示例
+
+经 Gemini 4 Argon 按一线技术专栏语感重写 `content/posts/pstack-poteto-guide/index.md` 与 `src/pages/guides/pstack.astro` 文案，增补带修复提示的 ESLint 规则与 TypeScript 强类型代码示例，并在互动页新增 16 项跨领域术语的后端视角点击/悬停直译浮卡。

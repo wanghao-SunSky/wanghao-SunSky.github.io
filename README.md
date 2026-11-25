@@ -16,7 +16,7 @@ Chinese notes on AI Agent engineering: agent architecture, tool calling, agent m
 | 评测 | 评测设计、回归测试、可靠性，Harness Engineering |
 | Agent 安全 | 提示词注入、权限边界、谁的话算命令 |
 
-最新文章：[土豆姐与 pstack：AI 写代码快了百倍后，怎么敢信任它](https://wanghao-sunsky.github.io/posts/pstack-poteto-guide/)（附[互动图解导读页](https://wanghao-sunsky.github.io/guides/pstack/)）。
+最新文章：[拆解 pstack：当 Agent 写代码速度远超人工审阅，如何用工程约束建立信任](https://wanghao-sunsky.github.io/posts/pstack-poteto-guide/)（附[互动图解导读页](https://wanghao-sunsky.github.io/guides/pstack/)）。
 
 文章列表见[网站首页](https://wanghao-sunsky.github.io/)。发现事实错误欢迎提 Issue，更正会写在文章末尾。
 

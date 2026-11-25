@@ -2,14 +2,14 @@
 import Base from '../../layouts/Base.astro';
 import { SITE, AUTHOR } from '../../data/site';
 
-const title = '土豆姐与 pstack：Agent 工程开发理论互动导读 | SunSky';
+const title = 'pstack 与 Lauren Tan 的 Agent 工程实践互动导读 | SunSky';
 const description =
-  '由宏观到微观、由易到难，用 6 章互动图解拆解 Lauren Tan（@poteto / 土豆姐）的信任倒金字塔、代码库园艺学与 cursor/plugins/pstack 四层架构。';
+  '按由宏观到微观的顺序，用 6 章互动图解拆解 Lauren Tan（@poteto）的信任倒金字塔、带修复提示的 Lint、类型约束与 cursor/plugins/pstack 四层架构。';
 const canonical = `${SITE.url}/guides/pstack/`;
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'TechArticle',
-  headline: '土豆姐与 pstack：Agent 工程开发理论互动导读',
+  headline: 'pstack 与 Lauren Tan 的 Agent 工程实践互动导读',
   description,
   url: canonical,
   image: `${SITE.url}/og/pstack-poteto-guide.png`,
@@ -34,9 +34,9 @@ const jsonLd = {
         </div>
         <nav class="pg-tabs" role="tablist" aria-label="章节导航">
           <button class="pg-tab" role="tab" data-chapter="0" aria-selected="true">01 破题</button>
-          <button class="pg-tab" role="tab" data-chapter="1" aria-selected="false">02 心法</button>
+          <button class="pg-tab" role="tab" data-chapter="1" aria-selected="false">02 护栏</button>
           <button class="pg-tab" role="tab" data-chapter="2" aria-selected="false">03 架构</button>
-          <button class="pg-tab" role="tab" data-chapter="3" aria-selected="false">04 实战</button>
+          <button class="pg-tab" role="tab" data-chapter="3" aria-selected="false">04 流程</button>
           <button class="pg-tab" role="tab" data-chapter="4" aria-selected="false">05 案例</button>
           <button class="pg-tab" role="tab" data-chapter="5" aria-selected="false">06 落地</button>
         </nav>
@@ -54,6 +54,7 @@ const jsonLd = {
           <span class="pg-pill" id="pg-pill-meso">中观结构</span>
           <span>→</span>
           <span class="pg-pill" id="pg-pill-micro">微观实操</span>
+          <span class="pg-glossary-hint">· 带虚线术语可点看直译</span>
         </div>
         <div class="pg-progress">
           <span class="pg-num" id="pgProgressText">第 1 / 6 章</span>
@@ -68,62 +69,62 @@ const jsonLd = {
       <!-- ==================== CH 01 ==================== -->
       <section class="pg-panel is-active" data-panel="0" data-level="macro">
         <div class="pg-head">
-          <div class="pg-eyebrow">第 01 章 · 宏观破题 · 入门</div>
-          <h1>先理清头绪：土豆姐和 pstack 到底是什么关系？</h1>
+          <div class="pg-eyebrow">第 01 章 · 宏观定位 · 问题背景</div>
+          <h1>当 Agent 写代码速度远超人工审阅，瓶颈移到了哪里？</h1>
           <p class="pg-lede">
-            很多人看网上讨论越看越绕，是因为把<strong>人、理论、工具、案例</strong>混成了一锅粥。其实全套内容只有一条主线：当 AI 写代码比人快 100 倍之后，工程师的核心工作不再是“敲代码”，而是<strong>搭建一个让 Agent 默认做对事的高信任环境</strong>。
+            在高频使用编码 Agent 的团队里，代码生成速度已经跨过了人工逐行阅读 Diff 的上限。Lauren Tan（<code>@poteto</code>，中文社区常称“土豆姐”）在演讲与开源项目 <code>pstack</code> 中重点解决的，正是<strong>如何用代码库架构、静态检查与自动化验证替代人肉盯防，让 Agent 默认产出可合入的代码</strong>。
           </p>
         </div>
 
         <div class="pg-grid-3">
           <div class="pg-card">
-            <h3>道 · 底层心法</h3>
+            <h3>核心理论 · 工程护栏</h3>
             <p class="pg-muted">
-              Lauren Tan（<code>@poteto</code>，中文圈称“土豆姐”，React Compiler 核心成员，现 SpaceXSI Grok Bot 负责人）提出的<strong>信任倒金字塔</strong>与<strong>代码库园艺学</strong>。
+              Lauren Tan（<code>@poteto</code>，React Compiler 核心成员，曾在 Meta、Netflix 与 Cursor 工作，现 SpaceXSI Grok Bot 工程负责人）提出的<strong>信任倒金字塔</strong>与<strong>代码库园艺</strong>。
             </p>
           </div>
           <div class="pg-card">
-            <h3>器 · 工具落地</h3>
+            <h3>开源实现 · 工具架构</h3>
             <p class="pg-muted">
-              她开源在 <code>cursor/plugins/pstack</code> 的工程技能包（59 Skills + 22 Playbooks + 2 Subagents），把心法封装成可复用的日常工作流。
+              开源在 <code>cursor/plugins/pstack</code> 的工程插件（59 Skills + 22 Playbooks + 2 Subagents），将研发步骤、静态检查升级与验证动作封装为可复用模块。
             </p>
           </div>
           <div class="pg-card">
-            <h3>证 · 极限压测</h3>
+            <h3>高压实践 · 真实数据</h3>
             <p class="pg-muted">
-              单人月合入 2,500–3,000 PR（团队 11,000 PR，回滚率约 0.5%），以及 4 天 1,150 PR 做出生存游戏 <code>tibo.dog</code> 的公开战绩。
+              单人月均合入 2,500–3,000 个 PR（团队月合入约 11,000 个 PR，回滚率约 0.5%），以及 4 天合入约 1,150 个 PR 完成生存游戏 <code>tibo.dog</code> 的公开复盘。
             </p>
           </div>
         </div>
 
         <div class="pg-card-sand">
-          <h3>全套理论浓缩成一句话</h3>
+          <h3>核心工程准则</h3>
           <p>
-            <strong>“If you want to go fast, go deep first.”（想跑得快，必须先扎得深。）</strong><br />
-            不要追求“20 个垃圾制造机同时飙代码”的假吞吐。先把单个 Agent 的护栏、验证和自证能力打穿，你才敢放心并行、甚至睡觉时让它自己把 PR 合并上线。
+            <strong>“If you want to go fast, go deep first.”（想跑得快，先扎得深。）</strong><br />
+            如果单个 Agent 的静态护栏、运行时验证与自证链路还没有跑通，盲目拉起 20 个并发 Agent 只会以 20 倍的速度堆积技术债。先把单点验证的深度做扎实，并行吞吐和夜间自动合入才能真正成立。
           </p>
         </div>
 
         <div class="pg-section">
-          <h2>先解开最容易让人绕晕的 3 个“伪矛盾”</h2>
-          <p class="pg-muted">点击下方卡片，把网上传得最混乱的三个冲突点一次说透：</p>
+          <h2>先厘清三组看似冲突的工程取舍</h2>
+          <p class="pg-muted">点击下方卡片，查看 pstack 在文档规则、前期设计与代码注释上的具体边界：</p>
 
           <div class="pg-paradox-list">
             <div class="pg-paradox-item is-open">
               <button class="pg-paradox-trigger" type="button" aria-expanded="true">
-                <span>矛盾一：一边反对往 AGENTS.md 堆规则，一边自己写了 59 个 Markdown Skills？</span>
+                <span>取舍一：一边反对往 AGENTS.md 追加规则，一边维护了 59 个 Markdown Skills？</span>
                 <span class="pg-badge">点击收起</span>
               </button>
               <div class="pg-paradox-body">
-                <p style="margin-top: 12px;">二者解决的根本不是同一类问题。</p>
+                <p style="margin-top: 12px;">这两类 Markdown 文件在工作流里承担的职责完全不同。</p>
                 <div class="pg-split">
                   <div class="pg-box">
-                    <span class="pg-box-label">她反对的（堆 AGENTS.md）</span>
-                    AI 每次犯错就往文档里追加一句“禁止用 X、记得检查 Y”。这种文字规则<strong>不报错、不拦截</strong>，堆到几百行以后模型照样无视。
+                    <span class="pg-box-label">所反对的做法（拿文档当补丁）</span>
+                    每次 Agent 犯错就往文档里追加一句“禁止用 X、记得检查 Y”。纯文字禁令缺乏编译期或检查期的硬拦截，堆到几百行后模型注意力反而被稀释。
                   </div>
                   <div class="pg-box is-good">
-                    <span class="pg-box-label">pstack 做的（59 个 Skills）</span>
-                    封装的是<strong>通用工程动作</strong>（怎么复现、怎么写原型、怎么验证）以及<strong>把文字教训升级成代码检查的工具</strong>（如 <code>/correct</code>、<code>/no-comments</code>）。
+                    <span class="pg-box-label">pstack 的做法（封装流程与升级工具）</span>
+                    59 个 Skills 封装的是<strong>标准化工程动作</strong>（如何复现缺陷、如何写原型、如何做运行时验证），以及<strong>把历史文字教训转化为代码检查的工具</strong>（如 <code>/correct</code>、<code>/no-comments</code>）。
                   </div>
                 </div>
               </div>
@@ -131,19 +132,19 @@ const jsonLd = {
 
             <div class="pg-paradox-item">
               <button class="pg-paradox-trigger" type="button" aria-expanded="false">
-                <span>矛盾二：一边说“我不相信 Plan Mode”，一边又最强调前期架构？</span>
+                <span>取舍二：一边质疑长篇 Plan Mode，一边高度重视前期架构设计？</span>
                 <span class="pg-badge">点击展开</span>
               </button>
               <div class="pg-paradox-body">
-                <p style="margin-top: 12px;">她反感的是“纯纸面、脱离代码的长篇实施计划”，而不是反对思考。</p>
+                <p style="margin-top: 12px;">这里区分的是“脱离代码的纸面长文计划”与“直接落在接口和原型上的架构设计”。</p>
                 <div class="pg-split">
                   <div class="pg-box">
-                    <span class="pg-box-label">纸面 Plan Mode 的坑</span>
-                    过度规定实现细节，却漏掉关键接口约束；对着抽象文档做评审时，AI 会凭空编造一堆根本不会发生的边缘风险，制造“今天干了好多活”的假象。
+                    <span class="pg-box-label">纸面长篇计划的局限</span>
+                    过度规定实现细节，同时漏掉关键的数据结构与接口边界；对着抽象文档做评审时，模型还会顺着假设推导并不存在的边缘风险。
                   </div>
                   <div class="pg-box is-good">
-                    <span class="pg-box-label">她的替代做法：用代码做计划</span>
-                    先写 <strong>README / 使用教程</strong>倒推 API，用 <code>/architect</code> 画类型签名草图，拿不准的交互直接写 2–3 个<strong>一次性原型</strong>跑出来比对。
+                    <span class="pg-box-label">替代做法：用代码与原型定方案</span>
+                    先写 <strong>README / 使用教程</strong>倒推调用方 API，用 <code>/architect</code> 敲定类型签名草图；遇到拿不准的交互或性能方案，直接写 2–3 个<strong>一次性原型（Prototype）</strong>实测对比。
                   </div>
                 </div>
               </div>
@@ -151,19 +152,19 @@ const jsonLd = {
 
             <div class="pg-paradox-item">
               <button class="pg-paradox-trigger" type="button" aria-expanded="false">
-                <span>矛盾三：为什么要禁掉 99% 的代码注释，甚至质疑传统 Clean Code？</span>
+                <span>取舍三：为什么要删掉 99% 的代码注释，甚至反对传统的防御性写法？</span>
                 <span class="pg-badge">点击展开</span>
               </button>
               <div class="pg-paradox-body">
-                <p style="margin-top: 12px;">在 Agent 时代，<strong>代码库本身就是下一个 Agent 最大的输入样本</strong>。</p>
+                <p style="margin-top: 12px;">在高频 Agent 协作中，<strong>现有代码库本身就是下一个 Agent 权重最高的少样本输入（Few-shot Examples）</strong>。</p>
                 <div class="pg-split">
                   <div class="pg-box">
-                    <span class="pg-box-label">注释为什么变成“病毒”</span>
-                    AI 喜欢用注释给自己偷懒打圆场（比如写一段注释解释为什么这里加了 <code>setTimeout</code> 补丁）。下一个 Agent 读到后，会把它当成“祖传规范”疯狂复制。
+                    <span class="pg-box-label">为什么补丁注释会扩散</span>
+                    模型常写一段注释来合理化临时绕过方案（例如解释为什么在此处加了 <code>setTimeout</code> 补丁）。后续 Agent 检索代码时，会把这种权宜之计当成项目既定规范复制到其他模块。
                   </div>
                   <div class="pg-box is-good">
-                    <span class="pg-box-label">面向 Agent 的好代码标准</span>
-                    注释无法被机器强制执行。需要解释的地方，要么改好命名、要么写测试、要么做成类型或 Lint 报错——报错信息里直接写明正确用法。
+                    <span class="pg-box-label">面向 Agent 的代码约束标准</span>
+                    注释无法被编译器或测试执行。需要表达约束的地方，优先改为自解释的命名、断言测试、强类型或带修复提示的 Lint 报错。
                   </div>
                 </div>
               </div>
@@ -175,54 +176,116 @@ const jsonLd = {
       <!-- ==================== CH 02 ==================== -->
       <section class="pg-panel" data-panel="1" data-level="macro">
         <div class="pg-head">
-          <div class="pg-eyebrow">第 02 章 · 底层心法（道） · 基础</div>
-          <h1>信任倒金字塔与代码库园艺学</h1>
+          <div class="pg-eyebrow">第 02 章 · 核心原理 · 工程护栏</div>
+          <h1>信任倒金字塔与代码库园艺</h1>
           <p class="pg-lede">
-            如果只能从土豆姐的全部演讲里带走一个模型，就是下面这座<strong>信任倒金字塔（Trust Inverted Pyramid）</strong>。它回答了一个根本问题：你的工程时间应该砸在哪一层，才能换来最高的 AI 可信度？
+            在《All Code Is Slop (Except Mine)》演讲中，Lauren Tan 用<strong>信任倒金字塔（Trust Inverted Pyramid）</strong>划分了工程投入的优先级：越靠上的层级确定性越强、边际 Token 成本越低，越值得优先建设。
           </p>
         </div>
 
-        <h2>互动图解：点击倒金字塔每一层，看它怎么管住 Agent</h2>
-        <p class="pg-muted">越往上面积越宽、确定性越强、越省 Token，应该投入最多精力；越往下越昂贵、越难扩展。</p>
+        <h2>互动图解：点击倒金字塔各层，查看对应的约束机制</h2>
+        <p class="pg-muted">从上到下依次代表确定性与可扩展性的递减；工程建设的核心目标是尽量把下层规则往上升格。</p>
 
         <div class="pg-pyramid" id="pgPyramid">
           <button class="pg-pyr-tier is-active" type="button" data-tier="1">
             <span class="pg-pyr-title">第 1 层 · 代码库与 API 架构（投入最多）</span>
-            <span class="pg-pyr-sub">100% 确定性 · 根除错误</span>
+            <span class="pg-pyr-sub">100% 确定性 · 消除错误入口</span>
           </button>
           <button class="pg-pyr-tier" type="button" data-tier="2">
             <span class="pg-pyr-title">第 2 层 · 静态分析 / 类型 / Lint / 验证</span>
-            <span class="pg-pyr-sub">确定性拦截 · 自动纠偏</span>
+            <span class="pg-pyr-sub">确定性拦截 · 报错即修复提示</span>
           </button>
           <button class="pg-pyr-tier" type="button" data-tier="3">
             <span class="pg-pyr-title">第 3 层 · 散文规则（AGENTS.md / Skills）</span>
-            <span class="pg-pyr-sub">软约束 · 只留主观判断</span>
+            <span class="pg-pyr-sub">软约束 · 仅留主观权衡</span>
           </button>
           <button class="pg-pyr-tier" type="button" data-tier="4">
             <span class="pg-pyr-title">第 4 层 · 人工 Review（尽量缩到最窄）</span>
-            <span class="pg-pyr-sub">不可扩展 · 只审证据</span>
+            <span class="pg-pyr-sub">不可扩展 · 核对意图与验证产物</span>
           </button>
         </div>
 
         <div class="pg-card" id="pgPyramidDetail"></div>
 
         <div class="pg-section">
-          <h2>代码库园艺学：为什么说“修补丁”反而是在投毒？</h2>
+          <h2>代码级示例：如何写出“带修复提示的 Lint”与“强类型约束”？</h2>
+          <p class="pg-muted">
+            倒金字塔第 2 层的静态检查除了拦截错误，还承担着<strong>给 Agent 投喂下一轮精确修复上下文</strong>的职责。下面看两个具体的代码对比：
+          </p>
+
+          <div class="pg-grid-2">
+            <div class="pg-card" style="margin: 0;">
+              <h3>示例 1 · 带修复提示的 Lint（ESLint）</h3>
+              <p class="pg-muted">
+                禁止业务组件直接调用 <code>setTimeout</code> 凑渲染时序，并在 <code>message</code> 中直接指明替代模块路径与函数签名：
+              </p>
+              <pre class="pg-code-block"><code>// eslint.config.js
+export default [
+  &#123;
+    files: ["src/features/**/*.&#123;ts,tsx&#125;"],
+    rules: &#123;
+      "no-restricted-syntax": [
+        "error",
+        &#123;
+          selector:
+            "CallExpression[callee.name='setTimeout']",
+          message:
+            "禁止在业务组件中直接调用 setTimeout 等待渲染。请改用 src/runtime/scheduler.ts 中的 scheduleAfterFrame(cb)，并在卸载时调用返回的 cancel()。",
+        &#125;,
+      ],
+    &#125;,
+  &#125;,
+];</code></pre>
+              <p class="pg-stone-note">
+                效果：Linter 报错输出直接成为下一轮精准提示词，Agent 无需人工提醒即可在一轮内替换为正确模块。
+              </p>
+            </div>
+
+            <div class="pg-card" style="margin: 0;">
+              <h3>示例 2 · 强类型约束（可辨识联合 + Branded Type）</h3>
+              <p class="pg-muted">
+                用可辨识联合类型替代宽松的可选字段组合，并用 Branded Type 防止同为 <code>string</code> 的业务 ID 传反：
+              </p>
+              <pre class="pg-code-block"><code>// 反例：允许 &#123; loading: true, error: "超时", data &#125; 同时并存
+interface LooseState&lt;T&gt; &#123;
+  loading: boolean; error?: string; data?: T;
+&#125;
+
+// 正例 A：可辨识联合类型，让非法状态无法通过编译
+type FetchState&lt;T&gt; =
+  | &#123; status: "idle" &#125;
+  | &#123; status: "loading"; startedAt: number &#125;
+  | &#123; status: "error"; retryable: boolean; message: string &#125;
+  | &#123; status: "success"; data: T &#125;;
+
+// 正例 B：Branded Type，防止 UserId 与 OrderId 传反
+type UserId = string &amp; &#123; readonly __brand: unique symbol &#125;;
+type OrderId = string &amp; &#123; readonly __brand: unique symbol &#125;;
+function cancelOrder(u: UserId, o: OrderId): void &#123;&#125;</code></pre>
+              <p class="pg-stone-note">
+                效果：把运行时极难排查的状态不一致与参数顺序错误，直接前移到 <code>tsc</code> 编译阶段阻断。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pg-section">
+          <h2>代码库园艺：为什么临时补丁会污染后续 Agent 的输出？</h2>
           <p>
-            2024 年上班一天看同事 3 个 PR；现在带着几十上百个 Agent，一天涌进来 300 个 PR。代码不再像盖砖墙，而像<strong>持续生长的花园</strong>。
+            当团队每天合入几十上百个 PR 时，代码库的演化速度发生质变。由于编码 Agent 在修改代码前会先检索仓库里的相邻实现，任何保留在主分支上的临时绕过逻辑（Workaround），都会被后续 Agent 当作标准范式模仿复制。
           </p>
           <p>
-            因为 Agent 天生会模仿仓库里已有的代码抄近路，你留下一处临时 workaround（杂草），下一个 Agent 就会以为这是标准写法，迅速复制成满园荒草。所以工程师的新角色是<strong>园艺师</strong>：一边拔草（删死代码、清旧模式），一边给每根拔掉的草立一条机器铁律，让它永远长不回来。
+            Lauren Tan 把日常治理称为<strong>代码库园艺（Codebase Gardening）</strong>：一方面持续清理废弃分支与兼容旧代码，另一方面在每次拔除坏模式时同步补上对应的静态检查，防止同类写法再次合入。
           </p>
         </div>
 
         <div class="pg-section">
-          <h2>互动推演：当 AI 反复犯同一个错，怎么把教训焊进系统？</h2>
-          <p class="pg-muted">选一个真实开发中常见的 AI 坏毛病，对比“写文档提醒”和“土豆姐的升级阶梯”：</p>
+          <h2>互动推演：当 AI 反复犯同一类错误，如何把教训固化进代码库？</h2>
+          <p class="pg-muted">选择一个高频开发问题，对比“追加文档提醒”与“沿倒金字塔向上升级”的处理差异：</p>
           <div class="pg-seg-row" id="pgScenarioBtns">
-            <button class="pg-seg-btn is-active" type="button" data-scene="timer">痛点 1：乱写 setTimeout 凑时序</button>
-            <button class="pg-seg-btn" type="button" data-scene="import">痛点 2：渲染层误引主进程代码</button>
-            <button class="pg-seg-btn" type="button" data-scene="comment">痛点 3：写注释掩盖临时补丁</button>
+            <button class="pg-seg-btn is-active" type="button" data-scene="timer">场景 1：滥用 setTimeout 凑时序</button>
+            <button class="pg-seg-btn" type="button" data-scene="import">场景 2：渲染层误引主进程模块</button>
+            <button class="pg-seg-btn" type="button" data-scene="comment">场景 3：用注释掩盖临时补丁</button>
           </div>
           <div class="pg-card" id="pgScenarioBox"></div>
         </div>
@@ -231,43 +294,43 @@ const jsonLd = {
       <!-- ==================== CH 03 ==================== -->
       <section class="pg-panel" data-panel="2" data-level="meso">
         <div class="pg-head">
-          <div class="pg-eyebrow">第 03 章 · 工具拆解（器） · 中观</div>
-          <h1>一张图看懂 pstack：别被 59 个技能吓到</h1>
+          <div class="pg-eyebrow">第 03 章 · 工具拆解 · 中观架构</div>
+          <h1>pstack 的四层结构：单入口如何调度 59 个 Skills 与 22 个 Playbooks</h1>
           <p class="pg-lede">
-            打开 <code>cursor/plugins/pstack</code> 仓库，你会看到 <strong>59 个 Skills、22 个 Playbooks、2 个 Subagents</strong>。新手最容易在这里懵掉——以为要背 59 条命令。其实它是一个极克制的<strong>“单入口 + 四层分工”</strong>系统。
+            <code>cursor/plugins/pstack</code> 仓库包含 <strong>59 个 Skills、22 个 Playbooks 和 2 个 Subagents</strong>。开发者在日常使用时无需手动记忆几十条命令，整套系统通过<strong>“单入口路由 + 四层职责解耦”</strong>按需加载对应模块。
           </p>
         </div>
 
-        <h2>点击任意一层，拆解它的职责与内部零件</h2>
+        <h2>点击任意一层，查看它的职责边界与核心组件</h2>
         <div class="pg-arch-stack" id="pgArchStack">
           <button class="pg-arch-layer is-active" type="button" data-layer="0">
             <span class="pg-arch-num">第 1 层 · 入口</span>
-            <span class="pg-arch-name">路由总调度台（/poteto-mode）</span>
-            <span class="pg-arch-hint">人只管说目标</span>
+            <span class="pg-arch-name">单入口路由（/poteto-mode）</span>
+            <span class="pg-arch-hint">交代目标与验收条件</span>
           </button>
           <button class="pg-arch-layer" type="button" data-layer="1">
             <span class="pg-arch-num">第 2 层 · 剧本</span>
             <span class="pg-arch-name">22 套场景剧本（Playbooks）</span>
-            <span class="pg-arch-hint">规定先干啥后干啥</span>
+            <span class="pg-arch-hint">固化标准执行步骤</span>
           </button>
           <button class="pg-arch-layer" type="button" data-layer="2">
             <span class="pg-arch-num">第 3 层 · 技能</span>
             <span class="pg-arch-name">35 个功能技能 + 2 个子 Agent</span>
-            <span class="pg-arch-hint">按步骤自动调用</span>
+            <span class="pg-arch-hint">由剧本按步骤调用</span>
           </button>
           <button class="pg-arch-layer" type="button" data-layer="3">
             <span class="pg-arch-num">第 4 层 · 原则</span>
             <span class="pg-arch-name">24 条工程原则（Principles）</span>
-            <span class="pg-arch-hint">决定取舍底线</span>
+            <span class="pg-arch-hint">定义技术取舍与纠偏口令</span>
           </button>
         </div>
 
         <div class="pg-card" id="pgArchDetail"></div>
 
         <div class="pg-card-sand">
-          <h3>pstack 最精妙的架构设计：把“流程”与“原则”彻底拆开</h3>
+          <h3>流程剧本与工程原则的解耦设计</h3>
           <p class="pg-muted-body">
-            大多数人写 Prompt 会把“步骤”和“质量要求”揉成一坨千字长文，模型一长就忘。<code>pstack</code> 把 <strong>Playbook（做什么步骤）</strong> 和 <strong>Principle（怎么做判断）</strong> 解耦：启动任务时先加载原则索引，中途如果 Agent 走偏，你甚至不用写长篇解释，直接喊出一条原则名字（例如 <code>Attack the Premise</code> 或 <code>Laziness Protocol</code>），就能瞬间把它拉回正轨。
+            如果把“操作步骤”和“质量准则”混写成一篇几千字的系统提示词，对话变长后模型很容易遗忘后半段约束。<code>pstack</code> 将 <strong>Playbook（执行哪些步骤）</strong> 与 <strong>Principle（依据什么标准做取舍）</strong> 拆开：任务启动时先加载精简的原则索引，中途一旦发现 Agent 偏离方向，直接点名原则名称（例如 <code>Attack the Premise</code> 或 <code>Laziness Protocol</code>）即可即时纠偏。
           </p>
         </div>
       </section>
@@ -275,47 +338,47 @@ const jsonLd = {
       <!-- ==================== CH 04 ==================== -->
       <section class="pg-panel" data-panel="3" data-level="meso">
         <div class="pg-head">
-          <div class="pg-eyebrow">第 04 章 · 全链路实战（术） · 进阶</div>
-          <h1>串起来看：一个真实需求怎么跑完 5 步闭环</h1>
+          <div class="pg-eyebrow">第 04 章 · 全链路推演 · 研发流程</div>
+          <h1>任务沙盘：一个真实需求如何走完 5 步研发与验证链路</h1>
           <p class="pg-lede">
-            明白了心法和 4 层结构后，我们把零散的技能串成一条直线。选一个真实任务场景，从第 1 步点到第 5 步，看看土豆姐平时到底怎么和 Agent 配合。
+            了解四层架构后，可以通过两个典型开发场景（缺陷修复与核心模块重写），逐步查看从需求输入、代码溯源、方案敲定到双重验证与代码清理的完整执行过程。
           </p>
         </div>
 
         <div class="pg-seg-row" id="pgCaseToggle">
-          <button class="pg-seg-btn is-active" type="button" data-case="bug">场景 A：修一个重试导致重复通知的 Bug</button>
-          <button class="pg-seg-btn" type="button" data-case="feature">场景 B：重做一套不闪烁的虚拟列表引擎</button>
+          <button class="pg-seg-btn is-active" type="button" data-case="bug">场景 A：修复任务重试导致的重复通知缺陷</button>
+          <button class="pg-seg-btn" type="button" data-case="feature">场景 B：重写一套消除布局抖动的虚拟列表引擎</button>
         </div>
 
         <div class="pg-stepper" id="pgStepper">
           <button class="pg-step-btn is-active" type="button" data-step="0">
             <span class="pg-step-idx">Step 1</span>
-            <span>间接提需求</span>
+            <span>定义目标与前提</span>
           </button>
           <button class="pg-step-btn" type="button" data-step="1">
             <span class="pg-step-idx">Step 2</span>
-            <span>摸清前世今生</span>
+            <span>代码与历史溯源</span>
           </button>
           <button class="pg-step-btn" type="button" data-step="2">
             <span class="pg-step-idx">Step 3</span>
-            <span>用代码定方案</span>
+            <span>用代码与原型定方案</span>
           </button>
           <button class="pg-step-btn" type="button" data-step="3">
             <span class="pg-step-idx">Step 4</span>
-            <span>双重实证验收</span>
+            <span>运行时与形式化验证</span>
           </button>
           <button class="pg-step-btn" type="button" data-step="4">
             <span class="pg-step-idx">Step 5</span>
-            <span>清理与固化</span>
+            <span>清理注释与固化检查</span>
           </button>
         </div>
 
         <div class="pg-card" id="pgWalkthroughDetail"></div>
 
         <div class="pg-card-sand">
-          <h3>为什么她约 70% 的 Token 都花在第 4 步（验证）？</h3>
+          <h3>为什么她将约 70% 的算力预算投在第 4 步（验证）？</h3>
           <p class="pg-muted-body">
-            传统开发里，写测试、建状态机模型、做 UI 自动化很费人力，所以大家能省就省。但 Agent 把“写验证代码”的成本打到了接近零——我们正进入<strong>软件测试与形式化验证的黄金时代</strong>。当你把大部分算力投在“让 Agent 自己跑真软件 + 用 TLA+ 穷举状态路径”，人工 Review 就从“肉眼扫 2,000 行代码”收缩成“看 10 秒录屏和一张状态图”。
+            在传统手工开发中，编写端到端驱动脚本和形式化状态机模型的人力成本极高，通常只用于核心基础设施。编码 Agent 大幅降低了编写验证代码的门槛。当约 70% 的 Token 投入到“驱动真实应用采样 + 用 TLA+ 穷举状态路径”后，人工审查就能从逐行核对上千行 Diff 收敛为查验一段运行录屏和一张状态转移图。
           </p>
         </div>
       </section>
@@ -323,83 +386,83 @@ const jsonLd = {
       <!-- ==================== CH 05 ==================== -->
       <section class="pg-panel" data-panel="4" data-level="micro">
         <div class="pg-head">
-          <div class="pg-eyebrow">第 05 章 · 极限案例与演进（证） · 微观</div>
-          <h1>从单兵到软件工厂：内环、外环与硬核招式</h1>
+          <div class="pg-eyebrow">第 05 章 · 极限案例与演进 · 微观实践</div>
+          <h1>从单机内环到团队外环：硬约束案例与近期策略调整</h1>
           <p class="pg-lede">
-            很多人一上来就想搭“多 Agent 自动流水线”，结果只是 20 倍速生产垃圾代码。这一章拆解她从单兵走向高频合入的真实顺序、具体工程招式，以及她近期的观点修正。
+            高频并行与无人值守合入的前提，是单次改动的质量下限已经通过自动化手段锁死。本章拆解从单兵内环扩展到团队外环的先后顺序、两个代表性项目的具体工程约束，以及 2026 年 11 月的最新策略修正。
           </p>
         </div>
 
-        <h2>顺序铁律：先打穿内环，再放大外环</h2>
+        <h2>演进顺序：先跑通单机内环，再扩展自动化外环</h2>
         <div class="pg-grid-2">
           <div class="pg-card" style="margin: 0;">
-            <h3>内环（Inner Loop）· 单兵深度</h3>
-            <p class="pg-muted">决定每一次改动的质量下限，必须先做到“默认靠谱”。</p>
+            <h3>内环（Inner Loop）· 单次改动质量下限</h3>
+            <p class="pg-muted">确保单个 Agent 在本地能够独立发现并拦截缺陷。</p>
             <div class="pg-chip-row">
               <span class="pg-chip is-brand">干净代码库</span>
               <span>→</span>
-              <span class="pg-chip is-brand">硬类型/Lint</span>
+              <span class="pg-chip is-brand">强类型与 Lint</span>
               <span>→</span>
-              <span class="pg-chip is-brand">实证+形式验证</span>
+              <span class="pg-chip is-brand">实证+形式化验证</span>
               <span>→</span>
               <span class="pg-chip is-brand">窄 PR 自证</span>
             </div>
             <p class="pg-stone-note">
-              判定标准：你在旁边看着跑完几次，确认每个环节出错都能自己停线报错。
+              判定标准：人工旁观数次完整任务，确认任一环节引入回归都能触发红灯阻断并自动回退修复。
             </p>
           </div>
           <div class="pg-card" style="margin: 0;">
-            <h3>外环（Outer Loop）· 规模工厂</h3>
-            <p class="pg-muted">只在内环稳固后开启，把单兵杠杆放大到 24×7。</p>
+            <h3>外环（Outer Loop）· 团队级持续吞吐</h3>
+            <p class="pg-muted">在内环稳定后开启，将单点验证能力放大为全天候流水线。</p>
             <div class="pg-chip-row">
-              <span class="pg-chip">收集反馈/报错</span>
+              <span class="pg-chip">汇总线上反馈/报错</span>
               <span>→</span>
               <span class="pg-chip">多路云端 Agent</span>
               <span>→</span>
-              <span class="pg-chip">自动 Fuzz 找虫</span>
+              <span class="pg-chip">自动 Fuzz 遍历客户端</span>
               <span>→</span>
-              <span class="pg-chip">自动开修合并</span>
+              <span class="pg-chip">验证通过自动合入</span>
             </div>
             <p class="pg-stone-note">
-              典型做法：每切一个新版本，Grok Bot 自动起项目模糊测试整个客户端，发现 Bug 直接提 PR 并走完验证合入。
+              典型实践：每次发布新版本时，Grok Bot 自动拉起项目对整个客户端执行模糊测试，捕获缺陷后直接提 PR 并走完验证合入。
             </p>
           </div>
         </div>
 
         <div class="pg-section">
-          <h2>真实案例陈列室：抽象理论怎么落成一行行硬约束？</h2>
+          <h2>真实项目对照：工程约束如何落成代码级规则？</h2>
           <div class="pg-seg-row" id="pgShowcaseBtns">
-            <button class="pg-seg-btn is-active" type="button" data-case="tibo">案例 A：tibo.dog（4 天 1,150 PR 游戏）</button>
-            <button class="pg-seg-btn" type="button" data-case="dune">案例 B：Dune / Grok Bot（团队月发 11,000 PR）</button>
+            <button class="pg-seg-btn is-active" type="button" data-case="tibo">案例 A：tibo.dog（4 天约 1,150 个 PR）</button>
+            <button class="pg-seg-btn" type="button" data-case="dune">案例 B：Dune / Grok Bot（团队月合入 11,000 个 PR）</button>
           </div>
           <div class="pg-card" id="pgShowcaseBox"></div>
         </div>
 
         <div class="pg-section">
-          <h2>别学过时的版本：土豆姐 2026 年 11 月的最新风向修正</h2>
+          <h2>2026 年 11 月的实践演进与策略调整</h2>
           <table>
             <thead>
               <tr>
-                <th style="width: 26%;">话题</th>
-                <th style="width: 34%;">早期 / 常见理解</th>
-                <th style="width: 40%;">最新实战结论（2026.11）</th>
+                <th style="width: 26%;">维度</th>
+                <th style="width: 34%;">早期做法 / 常见误区</th>
+                <th style="width: 40%;">2026 年 11 月调整后的策略</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td><strong>多模型对抗评审</strong><br /><code>/interrogate</code></td>
-                <td>让多个模型互撕代码 Diff，挑出一堆潜在隐患。</td>
-                <td><strong>明确降温：</strong>她公开表示纯抽象代码评审大多浪费 Token，模型容易沉迷吹毛求疵和过度设计；正在减少 <code>/interrogate</code> 调用，把预算转投<strong>运行时实证 + 形式化验证</strong>。</td>
+                <td>让多个模型围绕代码 Diff 交叉挑刺，试图靠纯文本评审找出潜在缺陷。</td>
+                <td><strong>缩减调用频次：</strong>她在 11 月公开表示，脱离运行现场的抽象代码评审大多消耗 Token 却产出低价值争论；目前已减少 <code>/interrogate</code>，将算力集中到<strong>运行时实证与形式化验证</strong>。</td>
               </tr>
               <tr>
-                <td><strong>形式化验证</strong><br />TLA+ / Lean</td>
-                <td>把 TLA+ 当成“证明代码零 Bug 的银弹”。</td>
-                <td><strong>理性定位：</strong>数学只能证明“实现符合规格”，但规格是人定的。她做 <code>/statechart</code> 的核心价值是把隐式状态机画成图，让人类一眼判断<strong>“AI 到底理没理解我的意图”</strong>。</td>
+                <td><strong>形式化验证定位</strong><br />TLA+ / Lean</td>
+                <td>误以为引入 TLA+ 就能保证业务代码绝对无缺陷。</td>
+                <td><strong>对齐意图工具：</strong>形式化工具只能证明“代码符合规格说明”，而规格仍由人定义。配套 <code>/statechart</code> 的核心作用是把隐式状态机绘制成图，帮开发者快速确认<strong>模型是否理解了真实业务意图</strong>。</td>
               </tr>
               <tr>
-                <td><strong>技能包体积</strong><br /><code>pstack</code> 迭代</td>
-                <td>以为技能越全越长越厉害。</td>
-                <td><strong>持续做减法：</strong>持续删减瘦身（如 v0.15.46 大幅缩短 Skill 篇幅、Playbook 精简至 22 个），用更短更硬的规则替代冗长说教。</td>
+                <td><strong>技能文档体积</strong><br /><code>pstack</code> 迭代</td>
+                <td>倾向于把技能说明写得面面俱到、越长越细。</td>
+                <td><strong>持续精简篇幅：</strong>在近期版本（如 v0.15.46）中大幅压缩 Skill 文本长度，将 Playbook 收敛至 22 个，用简短明确的硬约束替代长篇说明。</td>
               </tr>
             </tbody>
           </table>
@@ -409,102 +472,102 @@ const jsonLd = {
       <!-- ==================== CH 06 ==================== -->
       <section class="pg-panel" data-panel="5" data-level="micro">
         <div class="pg-head">
-          <div class="pg-eyebrow">第 06 章 · 落地抄作业 · 实用清单</div>
-          <h1>普通开发者怎么用？3 阶段最小落地路径</h1>
+          <div class="pg-eyebrow">第 06 章 · 分阶段落地 · 自查清单</div>
+          <h1>团队与个人如何借鉴？3 阶段渐进落地清单</h1>
           <p class="pg-lede">
-            土豆姐在官方指南里反复提醒：<strong>第一天千万别照搬 59 个技能，也别上来就写 TLA+</strong>。按性价比从高到低分三步推进，勾掉你已经做到的项，马上能看清下一步该补哪块。
+            <code>pstack</code> 官方指南明确提示：<strong>初期无需全量照搬 59 个技能，也不必在普通业务中强上 TLA+</strong>。按投入产出比从高到低分三步推进，勾选已落地的条目即可评估当前所处阶段。
           </p>
         </div>
 
         <div class="pg-card">
           <div class="pg-meter-row">
-            <strong>你的高信任 Agent 工程成熟度</strong>
-            <span class="pg-num" id="pgScoreLabel">已完成 0 / 9 项 · 刚起步</span>
+            <strong>Agent 工程约束成熟度自查</strong>
+            <span class="pg-num" id="pgScoreLabel">已完成 0 / 9 项 · 起步阶段</span>
           </div>
           <div class="pg-meter-bar" aria-hidden="true">
             <div class="pg-meter-fill" id="pgScoreFill" style="width: 0%;"></div>
           </div>
           <p class="pg-stone-note" id="pgScoreAdvice">
-            先拿下第 1 阶段的 3 个习惯，不用改一行配置，今天就能把 AI 返工率打下来一半。
+            建议先落地第 1 阶段的 3 项协作习惯，无需改动项目配置，即可显著降低因理解偏差导致的返工。
           </p>
         </div>
 
         <div class="pg-card">
-          <h3>第 1 阶段 · 今天就能改的 3 个协作习惯（零成本）</h3>
+          <h3>第 1 阶段 · 即刻可用的 3 项协作纪律（零配置成本）</h3>
           <div class="pg-check-group">
             <label class="pg-check-item">
               <input type="checkbox" data-check="s1-1" />
               <span>
-                <span class="pg-check-title">提需求只给“目标 + 可判真假的验收条件”，不再微操实现步骤</span>
-                <span class="pg-check-note">不说“帮我优化一下”，改说“重试不再产生重复记录，把复现失败和修复通过的真实命令输出贴给我”。</span>
+                <span class="pg-check-title">派发任务时明确“目标 + 可判真假的验收条件”，减少实现层面的微操</span>
+                <span class="pg-check-note">用“重试不再产生重复记录，并附上修复前后的复现命令输出”替代笼统的“帮我优化一下重试逻辑”。</span>
               </span>
             </label>
             <label class="pg-check-item">
               <input type="checkbox" data-check="s1-2" />
               <span>
-                <span class="pg-check-title">复杂任务动工前，先让 AI 用大白话复述问题</span>
-                <span class="pg-check-note">对应 <code>/in-your-own-words</code>：第一时间把理解偏差按死在写第一行代码之前。</span>
+                <span class="pg-check-title">复杂改动动工前，先要求 Agent 用自然语言复述底层问题</span>
+                <span class="pg-check-note">对应 <code>/in-your-own-words</code>：在修改第一行代码前暴露并纠正需求理解偏差。</span>
               </span>
             </label>
             <label class="pg-check-item">
               <input type="checkbox" data-check="s1-3" />
               <span>
-                <span class="pg-check-title">同一假设连修 2 次还报错，立刻喊停换假设</span>
-                <span class="pg-check-note">对应原则 <code>Attack the Premise</code>：写下你暗中相信的前提并直接写脚本证伪，拒绝死磕补丁。</span>
+                <span class="pg-check-title">基于同一假设连续修改 2 次仍未解决时，立即停手验证前提</span>
+                <span class="pg-check-note">对应原则 <code>Attack the Premise</code>：列出当前隐含假设并编写最小脚本证伪，避免在同一错误方向上叠加补丁。</span>
               </span>
             </label>
           </div>
         </div>
 
         <div class="pg-card">
-          <h3>第 2 阶段 · 本周给项目搭起来的 3 块底座（性价比最高）</h3>
+          <h3>第 2 阶段 · 为项目补齐 3 项基础护栏（高投入产出比）</h3>
           <div class="pg-check-group">
             <label class="pg-check-item">
               <input type="checkbox" data-check="s2-1" />
               <span>
-                <span class="pg-check-title">把项目验证收口成 1 条统一命令</span>
-                <span class="pg-check-note">让每个 Agent 都跑同一条 verify 命令输出通过/失败表，避免 5 个 Agent 各自发明 5 套测法浪费 Token。</span>
+                <span class="pg-check-title">将项目验证流程收敛为 1 条统一命令</span>
+                <span class="pg-check-note">让所有会话中的 Agent 均调用同一条 verify 命令输出结构化结果，避免每次临时拼凑测试命令。</span>
               </span>
             </label>
             <label class="pg-check-item">
               <input type="checkbox" data-check="s2-2" />
               <span>
-                <span class="pg-check-title">写一份 3–5 个核心路径的 Feature Map（功能地图）</span>
-                <span class="pg-check-note">用用户视角记录页面入口、关键按钮和预期状态，给人类和 Agent 建立同一套词典，顺便省掉大量摸索 Token。</span>
+                <span class="pg-check-title">为 3–5 条核心业务路径编写 Feature Map（功能地图）</span>
+                <span class="pg-check-note">记录关键页面入口、交互动作与预期状态，为开发者与 Agent 提供统一的验收基准。</span>
               </span>
             </label>
             <label class="pg-check-item">
               <input type="checkbox" data-check="s2-3" />
               <span>
-                <span class="pg-check-title">把最近反复纠正的 2–3 个 AI 坏习惯，升格为带修复提示的 Lint / 类型约束</span>
-                <span class="pg-check-note">记住规则：同错出现 2 次才建规则；新规则必须先在历史坏代码上跑红过，才算有效拦截。</span>
+                <span class="pg-check-title">将近期重复纠正的 2–3 类高频缺陷升级为强类型或带修复提示的 Lint</span>
+                <span class="pg-check-note">遵循“同类问题出现 2 次即建规则”的纪律；新 Lint 规则需先在历史缺陷代码上验证能够报错阻断。</span>
               </span>
             </label>
           </div>
         </div>
 
         <div class="pg-card">
-          <h3>第 3 阶段 · 面向复杂系统与多 Agent 的进阶打法</h3>
+          <h3>第 3 阶段 · 面向复杂状态与多路并行的进阶实践</h3>
           <div class="pg-check-group">
             <label class="pg-check-item">
               <input type="checkbox" data-check="s3-1" />
               <span>
-                <span class="pg-check-title">大改动先用一次性原型（Prototype）或接口草图做对比</span>
-                <span class="pg-check-note">能靠跑一个小实验决定的分叉，绝不靠写千字文档开会猜。</span>
+                <span class="pg-check-title">架构分叉优先通过一次性原型（Prototype）或类型草图实测对比</span>
+                <span class="pg-check-note">能通过小规模可运行实验直接比较延迟与交互手感的方案，不靠长篇纸面文档空谈取舍。</span>
               </span>
             </label>
             <label class="pg-check-item">
               <input type="checkbox" data-check="s3-2" />
               <span>
-                <span class="pg-check-title">状态机、并发重试等测试难覆盖的区域，试水 TLA+ 与状态图可视化</span>
-                <span class="pg-check-note">把代码背后隐含的状态流转画出来审，比逐行看锁和标志位靠谱得多。</span>
+                <span class="pg-check-title">在并发重试、多端同步等复杂状态机模块引入 TLA+ 与状态图可视化</span>
+                <span class="pg-check-note">将代码中隐含的状态流转提取为可视化状态图进行审查，覆盖常规单元测试难以穷举的交错路径。</span>
               </span>
             </label>
             <label class="pg-check-item">
               <input type="checkbox" data-check="s3-3" />
               <span>
-                <span class="pg-check-title">内环跑稳之后，再开独立 Worktree 多路并行或过夜自治</span>
-                <span class="pg-check-note">每个并行任务配齐“目标 + 验收脚本 + 决策日志 + 卡死退出条件”，绝不让无护栏的 Agent 裸奔。</span>
+                <span class="pg-check-title">内环验证稳固后，结合独立 Worktree 开启多路并行或无人值守运行</span>
+                <span class="pg-check-note">为每个并行任务配齐明确目标、验收脚本、决策日志与失败退出条件。</span>
               </span>
             </label>
           </div>
@@ -513,16 +576,26 @@ const jsonLd = {
         <div class="pg-card-sand">
           <h3>延伸阅读与一手来源</h3>
           <p class="pg-muted-body">
-            想看浓缩文字专栏版与完整一手参考链接，可以阅读配套文章：<a href="/posts/pstack-poteto-guide/">《土豆姐与 pstack：AI 写代码快了百倍后，怎么敢信任它》</a>。
+            如需查看技术专栏正文与完整一手参考链接，可阅读配套文章：<a href="/posts/pstack-poteto-guide/">《拆解 pstack：当 Agent 写代码速度远超人工审阅，如何用工程约束建立信任》</a>。
           </p>
         </div>
       </section>
 
       <div class="pg-pager">
         <button class="pg-pager-btn" id="pgPrevBtn" type="button" disabled>← 已是开篇</button>
-        <span class="pg-num pg-pager-hint" id="pgPagerHint">破题：先理清头绪</span>
-        <button class="pg-pager-btn primary" id="pgNextBtn" type="button">下一章：底层心法 →</button>
+        <span class="pg-num pg-pager-hint" id="pgPagerHint">破题：问题与主线</span>
+        <button class="pg-pager-btn primary" id="pgNextBtn" type="button">下一章：工程护栏 →</button>
       </div>
+    </div>
+
+    <div class="pg-popover" id="pgPopover" role="dialog" aria-hidden="true">
+      <div class="pg-popover-head">
+        <span class="pg-popover-tag" id="pgPopTag">术语直译</span>
+        <button class="pg-popover-close" id="pgPopClose" type="button" aria-label="关闭术语解释">×</button>
+      </div>
+      <div class="pg-popover-title" id="pgPopTitle"></div>
+      <p class="pg-popover-plain" id="pgPopPlain"></p>
+      <p class="pg-popover-analog" id="pgPopAnalog"></p>
     </div>
   </main>
 
@@ -571,6 +644,16 @@ const jsonLd = {
     }
     .pstack-guide code {
       overflow-wrap: anywhere;
+    }
+    .pstack-guide .pg-code-block {
+      margin: 10px 0;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: var(--parchment);
+      border: 1px solid var(--line);
+      font-size: 13.5px;
+      line-height: 1.6;
+      overflow-x: auto;
     }
     .pstack-guide .pg-num {
       font-variant-numeric: tabular-nums;
@@ -1212,6 +1295,100 @@ const jsonLd = {
       cursor: not-allowed;
     }
 
+    /* Interactive Term Glossary Popover (Miaoyan style) */
+    .pstack-guide .pg-glossary-hint {
+      font-size: 13px;
+      color: var(--stone);
+      letter-spacing: 0;
+    }
+    .pstack-guide .pg-term {
+      display: inline;
+      padding: 0 1px;
+      margin: 0;
+      border: 0;
+      border-bottom: 1px dashed var(--brand);
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      letter-spacing: inherit;
+      line-height: inherit;
+      cursor: help;
+      transition: background-color 0.14s ease, color 0.14s ease;
+    }
+    .pstack-guide .pg-term:hover,
+    .pstack-guide .pg-term.is-open {
+      background: var(--brand-tint);
+      color: var(--brand);
+      border-radius: 3px;
+    }
+    .pstack-guide .pg-popover {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 60;
+      width: min(336px, calc(100vw - 24px));
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--ivory);
+      color: var(--dark-warm);
+      box-shadow: 0 8px 28px rgba(30, 29, 27, 0.12);
+      display: none;
+      letter-spacing: 0.02em;
+    }
+    .pstack-guide .pg-popover.is-visible {
+      display: block;
+    }
+    .pstack-guide .pg-popover-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+    .pstack-guide .pg-popover-tag {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--brand);
+      letter-spacing: 0;
+    }
+    .pstack-guide .pg-popover-close {
+      border: 0;
+      background: transparent;
+      color: var(--stone);
+      font-size: 18px;
+      line-height: 1;
+      padding: 2px 6px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .pstack-guide .pg-popover-close:hover {
+      background: var(--warm-sand);
+      color: var(--near-black);
+    }
+    .pstack-guide .pg-popover-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--near-black);
+      margin-bottom: 6px;
+      letter-spacing: 0;
+    }
+    .pstack-guide .pg-popover-plain {
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--dark-warm);
+      margin: 0 0 8px;
+    }
+    .pstack-guide .pg-popover-analog {
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--olive);
+      background: var(--warm-sand);
+      padding: 8px 10px;
+      border-radius: 8px;
+      margin: 0;
+    }
+
     @media (max-width: 660px) {
       .pstack-guide .pg-grid-2,
       .pstack-guide .pg-grid-3,
@@ -1237,68 +1414,68 @@ const jsonLd = {
   <script is:inline>
     (function () {
       const CHAPTER_TITLES = [
-        '破题：先理清头绪',
-        '底层心法：信任倒金字塔',
+        '破题：问题与主线',
+        '工程护栏：信任倒金字塔',
         '工具拆解：pstack 四层架构',
-        '全链路实战：5 步闭环',
-        '极限案例与最新演进',
-        '落地抄作业：3 阶段清单',
+        '全链路推演：5 步工作流',
+        '真实案例与近期演进',
+        '分阶段落地：3 步自查清单',
       ];
 
       const PYRAMID_DATA = {
         '1': {
           badge: '第 1 层 · 最宽 · 100% 确定性',
           title: '代码库本身与 API / 架构设计',
-          why: 'Agent 永远倾向于抄仓库里现成的写法并走最短路径。把“正确的路”做成唯一好走的路、把“错误的路”从 API 上直接删掉，你就再也不用在 Code Review 里抓同类问题。',
-          example: 'Dune 框架直接在业务代码层禁用 React 的 useEffect，只允许框架底层使用；把 Electron 拆成 electron-main 和 electron-renderer 两个显式目录，天然传达边界。',
+          why: 'Agent 修改代码时会优先参考仓库内的既有写法并走最短调用路径。通过模块边界和 API 设计直接移除易错入口，可以从源头免去后续在 Code Review 中反复人工纠错的成本。',
+          example: 'Dune 框架在业务代码层直接禁用 React 的 useEffect，仅限框架底层原语内部调用；将 Electron 顶层目录显式拆分为 electron-main 与 electron-renderer，由目录结构直接体现进程边界。',
           pstack: '对应 pstack：/architect（先定数据结构与接口边界）、principle-model-the-domain、principle-type-system-discipline。',
         },
         '2': {
-          badge: '第 2 层 · 较宽 · 确定性拦截',
+          badge: '第 2 层 · 次宽 · 确定性拦截',
           title: '静态分析、类型、Lint、测试与形式化验证',
-          why: '文字规则被 AI 跳过时什么都不会发生，但编译器和 Lint 会立刻报红灯，直接把 AI 拦在提交前，而且报错信息还能充当精准的“下一轮提示词”。',
-          example: 'tibo.dog 用 .hot.ts 后缀配合 Lint 禁堆内存分配；包体积超过 124KB gzipped 直接让构建失败；用 TLA+ 检查多设备通知和剧情状态机。',
+          why: '文字规则被模型忽略时不会产生运行时反馈，而编译器和 Linter 会在提交前直接报红阻断；报错文本中附带的替代函数路径还能直接作为下一轮的修复上下文。',
+          example: 'tibo.dog 使用 .hot.ts 后缀配合自定义 Lint 禁止热路径分配堆内存；首包体积超过 124KB gzipped 直接令构建失败；用 TLA+ 检查多设备通知与游戏剧情状态机。',
           pstack: '对应 pstack：/correct、/create-verification-skill、/create-formal-verification-skill、/statechart。',
         },
         '3': {
-          badge: '第 3 层 · 较窄 · 软约束（按需极简）',
+          badge: '第 3 层 · 较窄 · 软约束（按需精简）',
           title: '散文式文字指导（AGENTS.md / Skills / 注释）',
-          why: '自然语言只该留给“机器确实判断不了、必须靠主观权衡”的规则。文字越长，模型注意力越稀释；一旦某条文字规则能转成 Lint 或架构约束，立刻从文档里删掉它。',
-          example: 'pstack 里的 /correct 要求维护一张“规则 ↔ 机器强制手段”对照表，每成功升级一条 Lint，就顺手删掉一条旧文档规则。',
+          why: '自然语言说明仅保留给机器无法自动判定的领域背景与设计权衡。文档越冗长，模型对单条指令的遵循率越低；一旦某条文字规则能升级为 Lint 或类型约束，应立即从文档中删除。',
+          example: 'pstack 的 /correct 技能要求维护“文字规则 ↔ 机器检查”映射，每落地一条静态检查，就同步清理对应的文档禁令。',
           pstack: '对应 pstack：/poteto-mode、24 条精简 Principles、/unslop、/no-comments。',
         },
         '4': {
           badge: '第 4 层 · 最窄 · 不可扩展',
-          title: '人工 Code Review（只审高杠杆决策与证据）',
-          why: '一天合入几百个 PR 时，人类不可能逐行细读代码。人的精力必须从“当人肉 Linter 抓低级错”解放出来，收口到两件事：审产品意图对齐 + 审运行录屏/状态图等验证产物。',
-          example: '她在做 tibo.dog 时，约 80% 的时间都花在亲自试玩体验、把反馈喂给 Bot，而不是逐行盯 Diff。',
-          pstack: '对应 pstack：/teach（让 AI 讲清权衡）、/statechart（可视化意图对齐）、/show-me-your-work（决策审计日志）。',
+          title: '人工 Code Review（聚焦意图对齐与验证产物）',
+          why: '当团队一天合入上百个 PR 时，人工已无法逐行充当语法和边界检查员。开发者的审查精力应当收敛到两件事：核对产品意图是否准确，以及查验运行录屏、测试输出和状态图等验证产物。',
+          example: '在开发 tibo.dog 期间，Lauren Tan 约 80% 的时间都花在试玩真实构建版本并将体验问题反馈给 Bot，而非逐行审阅代码 Diff。',
+          pstack: '对应 pstack：/teach（梳理方案权衡）、/statechart（可视化意图对齐）、/show-me-your-work（决策审计记录）。',
         },
       };
 
       const SCENARIO_DATA = {
         timer: {
-          bad: '在 AGENTS.md 写一行：“请不要滥用 setTimeout / requestAnimationFrame，注意避免 GC 卡顿。” → 两周后新开的 Agent 依然顺手写了一个 setTimeout，还贴心加了句注释说“临时等待渲染完成”。',
+          bad: '在 AGENTS.md 里追加一句：“请勿滥用 setTimeout / requestAnimationFrame，注意避免时序竞态与 GC 卡顿。” → 两周后新会话中的 Agent 依然顺手写下 setTimeout，并补了一行注释说明“临时等待渲染完成”。',
           steps: [
-            ['1. 架构根除', '消除命令式代码与声明式 UI 的直接冲突，提供统一的生命周期/调度原语。'],
-            ['2. Lint 拦截', '加一条自定义 Lint 规则禁止业务文件直接调用 setTimeout，并在报错文案里写死：“请改用 scheduler.afterFrame()，见 src/runtime/scheduler.ts”。'],
-            ['3. 历史验证', '先拿这条 Lint 去扫上个月出问题的那次 Commit，确认能红灯拦住再合入。'],
+            ['1. 架构收敛', '封装统一的帧后生命周期调度原语，避免业务组件自己拼凑异步时序。'],
+            ['2. Lint 阻断并指路', '通过 ESLint no-restricted-syntax 禁止业务目录直接调用 setTimeout，报错信息直接写明：“请改用 src/runtime/scheduler.ts 中的 scheduleAfterFrame(cb)”。'],
+            ['3. 历史回归校验', '先用新规则扫描此前引入缺陷的历史 Commit，确认能准确报错后再合入主分支。'],
           ],
         },
         import: {
-          bad: '在文档里写：“Renderer 线程不能引用 Main 线程模块，否则会卡死界面。” → Agent 只打开了当前文件，根本没记起文档第 47 条，顺手自动补全了一个跨层 import。',
+          bad: '在文档里注明：“Renderer 进程不可导入 Main 进程模块，否则会阻塞界面。” → Agent 只读取了当前编辑文件，未留意长文档中的条款，通过自动补全引入了跨进程依赖。',
           steps: [
-            ['1. 目录显式化', '把顶层目录直接命名为 electron-main/ 与 electron-renderer/，路径本身就是最强上下文。'],
-            ['2. 依赖图硬禁', '在依赖分析器和 Lint 里彻底禁止 renderer 导入 main，任何跨界引用秒报错。'],
-            ['3. 清理文档', '把 AGENTS.md 里对应的口头警告删掉——既然已经写不进去了，就没必要再占上下文 Token。'],
+            ['1. 目录边界显式化', '将顶层目录直接命名为 electron-main/ 与 electron-renderer/，让文件路径本身携带进程上下文。'],
+            ['2. 依赖图静态阻断', '在依赖分析工具与 Linter 中封死 renderer 对 main 的导入，跨界引用在本地检查阶段直接失败。'],
+            ['3. 删减冗余文档', '移除 AGENTS.md 中对应的文字提醒，把上下文窗口留给真正的业务判断。'],
           ],
         },
         comment: {
-          bad: 'PR 评审里口头回复：“以后别写解释补丁的废话注释。” → 下一轮对话 AI 毫无记忆，遇到难修的边界又写了一个 // HACK: workaround for race condition。',
+          bad: '在 PR 评论里口头提醒：“不要写解释临时补丁的冗余注释。” → 下一次开启新会话后，模型面对复杂边界照旧写下 // HACK: workaround for race condition。',
           steps: [
-            ['1. 自动化扫荡', '提交前跑 /no-comments，拉起只读评审子 Agent Comment Sicko 逐条审判注释。'],
-            ['2. 约束转代码', '凡是写着 // DO NOT REMOVE 的注释，强制改写成类型约束、断言测试或 Lint；无意义解释一律删。'],
-            ['3. 严禁逃生舱', '默认把 eslint-disable / @ts-ignore 视为可疑代码，除非附带原因、过期日期和人工批准。'],
+            ['1. 提交前专项清理', '收尾阶段触发 /no-comments，拉起只读子 Agent Comment Sicko 逐条审查新增注释。'],
+            ['2. 注释转可执行约束', '凡是标有 // DO NOT REMOVE 的警告性注释，强制转化为类型定义、断言测试或 Lint 规则；替补丁辩解的注释直接删除。'],
+            ['3. 管控规则豁免', '默认将 eslint-disable / @ts-ignore 视为待清理项，仅在附带明确原因、失效条件与人工确认时才允许保留。'],
           ],
         },
       };
@@ -1306,63 +1483,63 @@ const jsonLd = {
       const ARCH_DATA = [
         {
           title: '第 1 层：单入口路由（/poteto-mode）',
-          summary: '技能一多，用户根本记不住该调哪个。所以 pstack 的第一条设计铁律是：别让用户学工作流，让总路由根据任务自动选剧本。',
+          summary: '当仓库内有几十个技能时，靠开发者手工挑选命令很容易遗漏步骤。pstack 采用单入口设计，由总路由根据任务描述自动匹配剧本。',
           bullets: [
-            '<strong>你只管写 5 件事（通常 1–3 句话）：</strong>① 想解决什么目标；② 怎样算完成（能判真假）；③ 你要看什么证据；④ 你已知的线索；⑤ 真实约束（如“先复现再改”）。',
-            '<strong>配套入口：</strong><code>/setup-pstack</code> 用来选不同角色对应的模型与推理预算；拿不准怎么问时找 <code>/poteto-help</code>，它会给你拼好一段可直接复制的提示词。',
-            '<strong>个性化扩展：</strong>跑 <code>/automate-me</code> 能扫描你最近的对话记录，自动把你的个人习惯做成 <code>/你的名字-mode</code>，底层继续复用 pstack。',
+            '<strong>任务输入聚焦 5 项要素（通常 1–3 句话）：</strong>① 要解决的目标；② 可判真假的完成标准；③ 期望查验的验证证据；④ 已知线索与报错入口；⑤ 硬性约束（如“先复现再修改”）。',
+            '<strong>辅助配置工具：</strong><code>/setup-pstack</code> 用于配置不同子任务角色对应的模型与推理挡位；拿不准如何描述需求时，可调用 <code>/poteto-help</code> 生成结构化提示词。',
+            '<strong>个人工作流提取：</strong>运行 <code>/automate-me</code> 可分析近期会话记录，将高频个人偏好封装为 <code>/用户名-mode</code>，底层继续复用 pstack 组件。',
           ],
         },
         {
           title: '第 2 层：22 套场景剧本（Playbooks）',
-          summary: '匹配到任务类型后，Agent 第一动作不是写代码，而是把对应剧本的步骤原封不动复制到 TodoList 里，变成明面上的硬检查清单（想跳过某步必须写明 skip 理由）。',
+          summary: '识别出任务类别后，Agent 首先把对应剧本的标准步骤原样写入 TodoList，作为显式的执行检查表（跳过任何步骤都必须记录具体原因）。',
           bullets: [
-            '<strong>探索与排查类（6 套）：</strong><code>investigation</code>（只读摸底）、<code>bug-fix</code>（复现→二分定位→证据修复）、<code>perf-issue</code>、<code>hillclimb</code>（盯单一指标循环爬坡）、<code>runtime-forensics</code>、<code>trace-forensics</code>。',
-            '<strong>研发与设计类（5 套）：</strong><code>feature</code>（先定数据结构）、<code>refactoring</code>、<code>prototype</code>（一次性原型对比）、<code>visual-parity</code>（像素级基线对比）、<code>multi-phase-plan</code>。',
-            '<strong>交付与无人值守类（8 套）：</strong><code>opening-a-pr</code>（所有剧本收尾必调）、<code>babysit</code>（值守 PR 直到可合并）、<code>shipping</code>（绿灯栈自底向上合入）、<code>autonomous-run</code>、<code>autopilot-full</code>、<code>autopilot-stack</code>、<code>session-pickup</code>、<code>pause-safely</code>。',
-            '<strong>元维护类（3 套）：</strong><code>authoring-a-skill</code>、<code>eval</code>（盲测技能改动效果）、<code>worktree-cleanup</code>。',
+            '<strong>探索与诊断类（6 套）：</strong><code>investigation</code>（只读摸底）、<code>bug-fix</code>（复现 → 二分定位 → 证据修复）、<code>perf-issue</code>、<code>hillclimb</code>（围绕单一量化指标迭代优化）、<code>runtime-forensics</code>、<code>trace-forensics</code>。',
+            '<strong>研发与设计类（5 套）：</strong><code>feature</code>（先定数据结构与接口）、<code>refactoring</code>、<code>prototype</code>（多套一次性原型对比）、<code>visual-parity</code>（像素级基线比对）、<code>multi-phase-plan</code>。',
+            '<strong>交付与自动运行类（8 套）：</strong><code>opening-a-pr</code>（所有代码改动收尾必调）、<code>babysit</code>（跟进 PR 检查直至可合入）、<code>shipping</code>（绿灯 PR 栈自底向上合入）、<code>autonomous-run</code>、<code>autopilot-full</code>、<code>autopilot-stack</code>、<code>session-pickup</code>、<code>pause-safely</code>。',
+            '<strong>元维护类（3 套）：</strong><code>authoring-a-skill</code>、<code>eval</code>（盲测评估技能改动效果）、<code>worktree-cleanup</code>。',
           ],
         },
         {
-          title: '第 3 层：35 个高频功能技能 + 2 个专属子 Agent',
-          summary: '平时大多由剧本按步自动触发，你只需要认识这 4 组最核心的技能，以及为什么要有 2 个专用子 Agent：',
+          title: '第 3 层：35 个功能技能 + 2 个专用子 Agent',
+          summary: '绝大多数技能由剧本按步骤自动调用。日常开发主要涉及以下 4 组核心技能与 2 个专用子 Agent：',
           groups: {
             摸底对齐: [
-              ['/in-your-own-words', '动工前先用大白话复述目标和底层问题，防止理解跑偏。'],
-              ['/how', '并发摸清一个子系统当前是怎么跑起来的。'],
-              ['/why', '不猜代码，去查 Git、PR 评论、工单和文档，还原“当初为什么这么写”。'],
-              ['/teach', '串联 how + why，用图表把方案权衡讲给你听，顺手治好 AI 不读代码瞎拍板的毛病。'],
-              ['/recall', '从近期聊天记录捞回上下文，开新窗口也不用从零喂背景。'],
+              ['/in-your-own-words', '动手前先用自然语言复述目标与核心问题，尽早暴露理解偏差。'],
+              ['/how', '并行梳理目标子系统当前的运行链路与模块职责。'],
+              ['/why', '检索 Git 提交历史、PR 讨论与文档，还原现有代码的设计背景。'],
+              ['/teach', '串联 how 与 why，结合图表讲清方案权衡，防止模型未读懂上下文就盲目改代码。'],
+              ['/recall', '从近期本地会话历史中检索相关上下文，减少跨窗口重复交代背景。'],
             ],
             设计探索: [
-              ['/architect', '跨函数边界前先定调用方草图、类型和模块形态，画错了就推倒重来。'],
-              ['/arena', '同题多路竞赛：让多个模型各写一版方案，交叉评判后嫁接最强部分。'],
-              ['/swarm', '把大任务切成多片，派多个子 Agent 并行执行，最后汇总成一份报告。'],
-              ['/reframe & /sharpen', '需求模糊时帮你翻译成行话、补齐专家视角盲区并打磨提示词。'],
+              ['/architect', '跨模块修改前先敲定调用方示例、类型签名与目录边界。'],
+              ['/arena', '同题多模型对比：并行生成多版设计方案，交叉评估后融合各自优点。'],
+              ['/swarm', '将大规模任务拆分为独立分片，委派多个子 Agent 并行处理后汇总报告。'],
+              ['/reframe & /sharpen', '将模糊诉求转化为准确工程术语，补齐专业视角盲区并收紧验收标准。'],
             ],
             编码清理: [
-              ['/tdd', '有低成本本地测试时，先写失败测试再写实现。'],
-              ['/no-comments', '调用只读子 Agent Comment Sicko，清掉烂注释，把重要约束改写成类型/Lint。'],
-              ['/unslop & /technical-writing', '去掉 AI 翻译腔和废话；按 Diátaxis 框架写清晰的 README 与 PR 说明。'],
+              ['/tdd', '存在低成本本地测试路径时，遵循先写失败测试、再写实现的红绿循环。'],
+              ['/no-comments', '调用只读子 Agent Comment Sicko 清理冗余注释，将关键约束改写为类型或 Lint。'],
+              ['/unslop & /technical-writing', '清理生成文本中的机械套话；按 Diátaxis 结构编写清晰的 README 与 PR 描述。'],
             ],
             验证与进化: [
-              ['/create-verification-skill', '给项目生成一套能像真人一样驱动应用并抓证据的本地验证技能（含功能地图）。'],
-              ['/create-formal-verification-skill', '针对并发、重试、状态机，用 TLA+ / Lean 等工具验证普通测试测不到的死角。'],
-              ['/statechart', '把 TLA+ 模型画成人类一眼看懂的 Mermaid 状态图，标出违规路径。'],
-              ['/correct & /reflect', '翻历史提交把重复踩坑升格为架构/类型/Lint 铁律；沉淀长任务经验。'],
+              ['/create-verification-skill', '为项目生成一套驱动真实应用并采集证据的本地验证技能（含 Feature Map）。'],
+              ['/create-formal-verification-skill', '针对并发、重试与复杂状态机，使用 TLA+ 或 Lean 验证常规测试难以覆盖的交错路径。'],
+              ['/statechart', '将 TLA+ 状态机转换为可读的 Mermaid 状态转移图，高亮标出异常路径。'],
+              ['/correct & /reflect', '扫描历史提交，将重复出现的问题升格为架构、类型或 Lint 规则；复盘长任务经验。'],
             ],
           },
-          agentsNote: '<strong>2 个专属子 Agent：</strong><code>poteto-agent</code> 是委派干活的标准外壳，启动前强制完整读取 poteto-mode 和原则索引（防止普通通用子 Agent 脱离规范跑偏）；<code>comment-sicko</code> 是只读的铁面注释审查员，专治 AI 滥写补丁注释。',
+          agentsNote: '<strong>2 个专用子 Agent：</strong><code>poteto-agent</code> 是委派子任务的标准包装层，启动时强制读取 poteto-mode 与原则索引，防止通用子 Agent 脱离工程规范；<code>comment-sicko</code> 是只读注释审查员，专门识别并清理替临时补丁开脱的注释。',
         },
         {
           title: '第 4 层：24 条工程原则（Principles）',
-          summary: '每条原则是一个独立短文件，分为 5 大类。它们不规定死板步骤，而是定义工程品味和纠偏口令：',
+          summary: '每条原则对应一个独立的简短文件，按职责分为 5 类，用于统一技术判断标准并提供简短的纠偏口令：',
           principles: [
-            ['核心思维（10 条）', 'Laziness Protocol（偏向删除与最小改动）、Foundational Thinking（先定数据结构）、Redesign from First Principles、Attack the Premise（连错两次必证伪前提）、Subtract Before You Add、Minimize Reader Load、Outcome-Oriented Execution、Experience First、Exhaust the Design Space、Build the Lever（做工具而不是手工干）。'],
-            ['架构纪律（6 条）', 'Model the Domain（用状态机/类型替代散乱 if-else）、Boundary Discipline（边界校验、内部纯净）、Type System Discipline（让非法状态无法表示）、Make Operations Idempotent、Migrate Callers Then Delete Legacy APIs、Separate Before Serializing Shared State（先消除共享，别急着加锁）。'],
-            ['验证铁律（5 条）', 'Prove It Works（用真产物证明，不信“能编译”）、Fix Root Causes（治根因不打补丁）、Sequence Verifiable Units（小步可验证提交）、Test Behavior Not Implementation、Explain the Number（先查清指标瓶颈再报数据）。'],
-            ['委派与自治（2 条）', 'Guard the Context Window（大活派子 Agent，主线程只留摘要）、Never Block on the Human（可逆操作先干再给结果，不可逆才停下问）。'],
-            ['元原则（1 条）', 'Encode Lessons in Structure（同一提醒写第二遍时，立刻改成 Lint/类型/脚本，而不是再写文字）。'],
+            ['核心思维（10 条）', 'Laziness Protocol（优先删减与最小改动）、Foundational Thinking（先定数据结构）、Redesign from First Principles、Attack the Premise（同一假设连挂两次必先证伪前提）、Subtract Before You Add、Minimize Reader Load、Outcome-Oriented Execution、Experience First、Exhaust the Design Space、Build the Lever（优先造工具而非手工重复）。'],
+            ['架构纪律（6 条）', 'Model the Domain（用显式状态机与类型替代零散布尔分支）、Boundary Discipline（边界解析校验、内部保持纯净）、Type System Discipline（让非法状态无法通过编译）、Make Operations Idempotent、Migrate Callers Then Delete Legacy APIs、Separate Before Serializing Shared State（优先消除共享状态，而非盲目加锁）。'],
+            ['验证纪律（5 条）', 'Prove It Works（用真实运行产物证明，不把“编译通过”当完成）、Fix Root Causes（定位根因，拒绝表层补丁）、Sequence Verifiable Units（拆分为小步可验证的提交单元）、Test Behavior Not Implementation、Explain the Number（先核清指标理论上限与瓶颈再汇报数据）。'],
+            ['委派与自治（2 条）', 'Guard the Context Window（高噪探索派给子 Agent，主会话只保留精简结论）、Never Block on the Human（可逆操作先执行再拿结果汇报，仅在不可逆高风险动作前暂停确认）。'],
+            ['元原则（1 条）', 'Encode Lessons in Structure（同一注意事项出现第二次时，立即改写为 Lint、类型或检查脚本，不再往文档里堆叠文字）。'],
           ],
         },
       ];
@@ -1370,89 +1547,89 @@ const jsonLd = {
       const WALKTHROUGH = {
         bug: [
           {
-            title: 'Step 1 · 间接提需求：不喂人类猜想',
-            prompt: '/poteto-mode 读一下这条报错工单：任务重试时用户会收到两条重复通知。先用你自己的话复述底层问题是什么，然后先复现、再修复并证明有效。',
-            inside: '触发 <code>/in-your-own-words</code> + 匹配 <code>bug-fix</code> 剧本，把 6 个标准步骤原样写入 TodoList。',
-            output: 'Agent 先压噪复述：问题出在幂等键或重试时序，而不是盲目跟着你的猜测改某个函数。你在它写第一行代码前就确认了方向没歪。',
+            title: 'Step 1 · 定义目标与前提：不把人工猜测当指令',
+            prompt: '/poteto-mode 读一下这条故障工单：任务重试时用户会收到两条重复通知。先用你自己的话复述底层问题，然后先构造稳定复现，再修复并给出验证证据。',
+            inside: '触发 <code>/in-your-own-words</code> 并匹配 <code>bug-fix</code> 剧本，将 6 个标准步骤写入 TodoList。',
+            output: 'Agent 先剥离表象并复述核心问题：需要核查幂等键生成逻辑与重试并发时序。开发者在写第一行代码前即可确认排查方向。',
           },
           {
-            title: 'Step 2 · 摸清前世今生：读代码 + 查历史',
-            prompt: '（剧本自动执行，无需你手动敲命令）',
-            inside: '并发调 <code>/how</code> 追踪通知发送链路，同时调 <code>/why</code> 查 Git 历史和旧 PR，确认当初为什么没加去重、有没有历史兼容包袱。',
-            output: '一份带代码路径和历史提交引用的简报。先在真实环境跑出一个<strong>稳定复现重复通知的失败样例</strong>。',
+            title: 'Step 2 · 代码与历史溯源：搞清现状与历史包袱',
+            prompt: '（由剧本自动推进，无需手动逐条输入命令）',
+            inside: '并行调用 <code>/how</code> 追踪通知下发调用链，同时调用 <code>/why</code> 检索 Git Blame 与历史 PR，查清此前未做幂等去重的背景与兼容约束。',
+            output: '输出附带文件路径与历史 Commit 引用的诊断摘要，并在本地环境中跑出<strong>稳定触发重复通知的失败复现用例</strong>。',
           },
           {
-            title: 'Step 3 · 二分根因 & 定数据结构',
-            prompt: '（若涉及跨模块接口调整，自动进入架构草图）',
-            inside: '按 <code>Fix Root Causes</code> 原则用运行时日志二分排除假说；跨函数边界时走 <code>/architect</code>，用强类型把“已发送/未发送”状态显式建模，而不是顺手加个 <code>if (seen)</code> 补丁。',
-            output: '每一行改动都能追溯到运行时证据；被证伪的猜想代码立刻回滚，不留半点多余防御。',
+            title: 'Step 3 · 二分定位根因 & 收紧状态类型',
+            prompt: '（若涉及跨模块数据结构调整，自动进入架构草图步骤）',
+            inside: '遵循 <code>Fix Root Causes</code> 原则通过运行时日志二分排除假设；跨函数边界修改时调用 <code>/architect</code>，用可辨识联合类型显式表达投递状态，避免在外部随意添加 <code>if (seen)</code> 临时分支。',
+            output: '每处代码修改均对应明确的运行时根因；已被证伪的试探性改动全部回滚，不在仓库里遗留防御性死代码。',
           },
           {
-            title: 'Step 4 · 双重实证验收（重头戏）',
-            prompt: '（触发 Prove It Works + 形式化状态检查）',
-            inside: '① 运行时实证：在原复现表面重跑真实重试流程，拿到确凿日志/输出；② 形式化验证：用 <code>/create-formal-verification-skill</code> + <code>/statechart</code> 对“重试 + 并发通知”状态机跑 TLC 模型检查。',
-            output: '交付物不是一句“我修好了”，而是：① 先红后绿的复现提交记录；② 真实运行证据；③ 一张确认无重复投递路径的状态图。',
+            title: 'Step 4 · 运行时实证 + 形式化状态机检验',
+            prompt: '（触发 Prove It Works 与状态机检查）',
+            inside: '① 运行时实证：在原复现入口重跑重试与并发链路，采集真实日志与状态输出；② 形式化验证：调用 <code>/create-formal-verification-skill</code> 与 <code>/statechart</code>，对“失败重试 + 并发投递”状态机执行 TLC 模型检验。',
+            output: '交付完整的三项证据：① 先红后绿的复现与修复提交记录；② 真实环境运行输出；③ 确认无重复投递路径的状态转移图。',
           },
           {
-            title: 'Step 5 · 清理、窄 PR 与防复发',
-            prompt: '（收尾自动触发 /no-comments 与 opening-a-pr）',
-            inside: '<code>Comment Sicko</code> 扫掉多余注释；按“先失败复现、后根因修复”的顺序整理小颗粒 Commit 打开窄 PR；如果同类幂等错以前也犯过，跑 <code>/correct</code> 补一条静态检查。',
-            output: '一个自证清白、审阅极快的窄 PR，加上一条让未来所有 Agent 永久免疫同类 Bug 的护栏。',
+            title: 'Step 5 · 清理冗余注释、整理窄 PR 与防复发固化',
+            prompt: '（收尾阶段自动触发 /no-comments 与 opening-a-pr）',
+            inside: '<code>Comment Sicko</code> 清理无价值的解释性注释；按“先失败复现提交、后根因修复提交”的顺序整理窄 PR；若同类幂等缺失曾重复出现，调用 <code>/correct</code> 补充静态检查规则。',
+            output: '产出一个上下文清晰、包含自证产物的小颗粒度 PR，并同步补齐防止后续 Agent 再犯同类错误的静态护栏。',
           },
         ],
         feature: [
           {
-            title: 'Step 1 · 召回记忆 + 明确终局目标',
-            prompt: '/recall 我过去 7 天修列表闪烁和性能的记录。目标：设计一个从根源消灭闪烁的新虚拟化引擎，不要先写长篇 Plan。',
-            inside: '触发 <code>/recall</code> 捞回近期上下文，结合 <code>feature</code> 剧本，跳过空洞的纸面计划。',
-            output: 'Agent 带着过去 7 天的踩坑记忆进入状态，零重复解释。',
+            title: 'Step 1 · 检索历史上下文 + 明确交付目标',
+            prompt: '/recall 检索过去 7 天关于列表闪烁和滚动性能的排查记录。目标：重新设计一套消除布局抖动的虚拟列表引擎，跳过长篇纸面计划。',
+            inside: '触发 <code>/recall</code> 提取近期相关会话结论，挂载 <code>feature</code> 剧本推进。',
+            output: 'Agent 直接带上此前已验证的性能瓶颈与踩坑记录进入设计阶段，免去重复交代背景。',
           },
           {
-            title: 'Step 2 · 摸透旧实现与设计权衡',
-            prompt: '用 /how 和 /why 摸清当前虚拟列表为什么会抖动。',
-            inside: '<code>/how</code> 梳理测量、滚动与回收机制；<code>/why</code> 查清老架构妥协的历史原因。',
-            output: '定位到核心矛盾（例如异步测量与同步渲染帧打架），避免新引擎重蹈覆辙。',
+            title: 'Step 2 · 梳理旧实现瓶颈与历史权衡',
+            prompt: '使用 /how 和 /why 查清现有虚拟列表在快速滚动时抖动的具体原因。',
+            inside: '<code>/how</code> 梳理高度测量、节点回收与渲染调度链路；<code>/why</code> 核查旧架构当时的历史妥协。',
+            output: '锁定核心症结（例如异步 DOM 测量与同步渲染帧相互抢占），确保新设计从数据结构层面避开旧坑。',
           },
           {
-            title: 'Step 3 · README 驱动 + 多原型竞技',
-            prompt: '先用 /technical-writing 写一篇“开发者怎么用这个新包”的教程；拿不准的滚动方案用原型剧本做 2 个可跑变体对比。',
-            inside: '用教程倒推极简调用方 API；<code>/architect</code> + <code>/arena</code> 跨模型画接口草图；<code>prototype</code> 剧本挂出切换器跑真实帧率。',
-            output: '不是猜哪个方案好，而是直接看两套原型的实测布局与耗时；再用 <code>/teach</code> 让 AI 讲透为什么新方案更优。',
+            title: 'Step 3 · README 驱动 API 设计 + 多原型实测对比',
+            prompt: '先用 /technical-writing 写一份调用方接入指南；对拿不准的滚动高度估算策略，用 prototype 剧本写 2 个可运行变体对比帧率。',
+            inside: '通过接入文档倒推简洁的调用方接口；用 <code>/architect</code> 与 <code>/arena</code> 比较类型草图；利用 <code>prototype</code> 剧本在同一页面挂载切换器实测帧率。',
+            output: '直接基于两套可运行原型的真实帧率与滚动手感敲定方案，再配合 <code>/teach</code> 生成图文说明。',
           },
           {
-            title: 'Step 4 · 真机跑通 + 数学证明 + 指标审计',
-            prompt: '（自动调用验证技能、Lean 证明与 /benchmark-checklist）',
-            inside: '① 用项目的验证 CLI + Feature Map 驱动真实 UI 录屏；② 对核心虚拟化索引算法用 Lean 证明不会出现越界抖动；③ 用 <code>/benchmark-checklist</code> 核验性能提速数字不是测偏了。',
-            output: '端到端录屏 + 算法属性证明 + 经得起拷问的性能对比表。',
+            title: 'Step 4 · 端到端录屏 + 算法属性证明 + 基准审计',
+            prompt: '（自动调用项目验证技能、Lean 证明与 /benchmark-checklist）',
+            inside: '① 使用项目的验证 CLI 与 Feature Map 驱动真实浏览器采集滚动录屏；② 使用 Lean 证明核心索引区间算法不会发生越界抖动；③ 按 <code>/benchmark-checklist</code> 校验性能对比数据。',
+            output: '交付端到端运行录屏、算法边界证明以及排除测量偏差后的性能基准对比表。',
           },
           {
-            title: 'Step 5 · 删旧留新，不留兼容垃圾',
-            prompt: '（遵循 Migrate Callers Then Delete Legacy APIs）',
-            inside: '按小步可验证单元（<code>Sequence Verifiable Units</code>）分批迁移调用方并直接删掉老实现；<code>/no-comments</code> 清理注释；若项目留了临时大计划文件，完工后直接删除免得误导后来的 Agent。',
-            output: '干净的新底座上线，老旧实现清零，代码库反而比改造前更轻。',
+            title: 'Step 5 · 迁移调用方并彻底移除旧实现',
+            prompt: '（遵循 Migrate Callers Then Delete Legacy APIs 原则）',
+            inside: '按小步可验证单元（<code>Sequence Verifiable Units</code>）分批迁移调用方，完成后直接删掉旧版虚拟列表与临时计划文档，最后执行 <code>/no-comments</code>。',
+            output: '新引擎合入上线，旧实现与过渡兼容代码全部清零，防止两套模式并存误导后续 Agent。',
           },
         ],
       };
 
       const SHOWCASE = {
         tibo: {
-          title: 'tibo.dog —— 4 天业余时间、约 1,150 个 PR 做出 2.5D 像素生存游戏',
-          intro: '2026 年 11 月 1 日发布，花 5.99 美元买域名，用 Grok Bot + Cursor + pstack 搭建，可直接嵌在 X 信息流卡片（245px）到全屏 60fps 运行。',
+          title: 'tibo.dog —— 4 天业余时间、合入约 1,150 个 PR 完成的 2.5D 像素生存游戏',
+          intro: '2026 年 11 月 1 日上线，使用 Grok Bot + Cursor + pstack 构建，支持从 X 信息流内嵌卡片（245px）到全屏视图稳定 60fps 运行。',
           items: [
-            ['文件路径即性能契约（.hot.ts）', '凡是每帧 / 每 Tick 执行的热路径统一命名为 .hot.ts，配套 Lint 严禁在里面分配堆内存（禁止对象字面量、闭包、new），从根源杜绝 GC 掉帧。'],
-            ['每抓一个 Bug 就加一条 Lint', '1,150 个 PR 没乱套的秘诀：发现坏模式立刻让 Bot 写一条拦截规则；代码注释被 Lint 全面禁止，写不清就改变量名或写测试。'],
-            ['TLA+ 状态机护航', '剧情、过场演出、升级自动选卡与暂停/失焦组合全用 TLA+ 建模并用 /statechart 可视化，揪出了多个肉眼极难发现的状态竞争 Bug。'],
-            ['硬预算与全代码化闭环', '首包超过 124KB gzipped 直接构建失败；没有外部音频和图片文件，音乐由自研 Game Boy 芯片代码合成、像素画全由代码生成；模拟 100% 确定性（服务端重放校验高分），甚至让 Headless Bot 自动打游戏调难度生存率。'],
+            ['文件名即性能约束（.hot.ts）', '所有每帧 / 每 Tick 执行的热路径代码统一采用 .hot.ts 后缀，配套 Lint 严禁在其中分配堆内存（禁止对象字面量、闭包与 new），从源头规避 GC 掉帧。'],
+            ['每捕获一类缺陷就补一条 Lint', '合入 1,150 个 PR 仍保持稳定的关键：每次发现反模式立即让 Bot 编写对应的静态检查；代码注释被 Lint 全面禁止，倒逼清晰命名与测试覆盖。'],
+            ['TLA+ 状态机排查死锁与竞态', '剧情推进、过场动画、升级自动选卡与暂停/失焦组合全部使用 TLA+ 建模，并通过 /statechart 生成可视化状态图，提前抓出多处隐蔽的状态竞争缺陷。'],
+            ['硬性包体积预算与确定性模拟', '首包超过 124KB gzipped 直接令构建失败；无外部图片与音频资源，芯片音乐与像素贴图全部由代码生成；游戏逻辑 100% 确定性（支持服务端重放校验高分），并由 Headless Bot 自动跑局校准难度曲线。'],
           ],
         },
         dune: {
-          title: 'Dune & Grok Bot —— 团队月合入 11,000 PR，回滚率稳在约 0.5%',
-          intro: 'SpaceXSI 内部构建的桌面客户端框架（类似 Electron 版 Next.js），把多年做桌面应用的血泪教训全部编码成框架硬约束。',
+          title: 'Dune & Grok Bot —— 团队月合入约 11,000 个 PR，回滚率稳定在约 0.5%',
+          intro: 'SpaceXSI 内部构建的桌面客户端框架（定位类似面向 Electron 的 Next.js），将桌面应用开发的高频踩坑点直接固化为框架层约束。',
           items: [
-            ['业务代码直接禁掉 useEffect', '凡是需要“极高微妙直觉”才能用对的 API，Agent 必然用成垃圾。团队干脆在业务层彻底禁用 useEffect，只允许在框架封装好的原语内部使用。'],
-            ['目录名 + 依赖分析硬隔离进程', '吸取 Cursor 时期渲染层误引主进程导致卡顿的教训，直接设 electron-main 与 electron-renderer 顶层目录，由依赖图 Lint 物理封死跨界导入。'],
-            ['报错信息自带“修复指南”', 'Lint 报错不只是冷冰冰地红灯拒绝，而是明确指路该换哪个文件、哪个函数去治根因，让 Agent 一轮就能自动修对。'],
-            ['外环自动 Fuzz 找虫并自动合入', '正因为内环足够硬，每发一个新版本，Grok Bot 都会自动起项目像真人一样乱点整个应用找 Bug、开修复 PR 并走完验证自动合并，性能反而越迭代越快。'],
+            ['业务层代码直接禁用 useEffect', '对于依赖微妙心智模型才能写对的 API，Agent 在高频生成中极易写出内存泄漏或死循环。团队直接在业务代码层禁用 useEffect，仅允许使用框架封装好的声明式原语。'],
+            ['显式目录名 + 依赖图物理隔离进程', '针对 Electron 渲染层误引主进程模块引发的卡顿隐患，顶层直接划分为 electron-main 与 electron-renderer 目录，由依赖分析器阻断任何跨界导入。'],
+            ['Lint 报错内置替代 API 指引', '静态检查报错不仅指出违规位置，还会在报错文本中写明应当替换的具体文件与函数名，使 Agent 能在当前轮次内根据报错输出自动改对。'],
+            ['外环版本级自动 Fuzz 与自动合入', '依托稳固的内环检查，每次切出新版本时 Grok Bot 都会自动驱动客户端执行全量模糊测试，发现异常后自动定位、提 PR 并跑通验证合入。'],
           ],
         },
       };
@@ -1491,6 +1668,7 @@ const jsonLd = {
         prevBtn.textContent = currentChapter > 0 ? '← ' + CHAPTER_TITLES[currentChapter - 1].split('：')[0] : '← 已是开篇';
         nextBtn.textContent = currentChapter === 5 ? '回到第 01 章 ↺' : '下一章：' + CHAPTER_TITLES[currentChapter + 1].split('：')[0] + ' →';
         pagerHint.textContent = CHAPTER_TITLES[currentChapter];
+        if (typeof hidePopover === 'function') hidePopover();
         if (shouldScroll) window.scrollTo({ top: 0, behavior: 'smooth' });
       }
 
@@ -1523,6 +1701,252 @@ const jsonLd = {
         });
       });
 
+      const GLOSSARY = {
+        useEffect: {
+          tag: '前端 · React 钩子',
+          title: 'useEffect',
+          plain: 'React 里用来监听状态变化并触发副作用（发请求、绑事件、改外部状态）的 API。',
+          analog: '后端视角：类似在业务函数里随手挂异步触发器或回调——依赖链一长就容易重复请求、执行顺序错乱甚至死循环。',
+        },
+        'electron-main': {
+          tag: '桌面端 · 进程边界',
+          title: 'electron-main / electron-renderer',
+          plain: 'Electron 桌面应用的双进程架构：main 负责系统资源与重活，renderer 负责界面渲染。',
+          analog: '后端视角：类似服务端严禁表现层绕过接口直接 import 底层存储模块，也禁止把阻塞重计算塞进响应请求的事件循环线程。',
+        },
+        'electron-renderer': {
+          tag: '桌面端 · 进程边界',
+          title: 'electron-main / electron-renderer',
+          plain: 'Electron 桌面应用的双进程架构：renderer 只管渲染界面，不能直接引入 main 主进程模块。',
+          analog: '后端视角：类似服务端分层隔离——把阻塞 IO 或系统级逻辑硬挡在响应线程之外，靠依赖检查杜绝界面卡顿。',
+        },
+        Electron: {
+          tag: '桌面端 · 运行时',
+          title: 'Electron',
+          plain: '用 Chromium + Node.js 构建跨平台桌面客户端的框架（如 VS Code、Cursor）。',
+          analog: '后端视角：相当于把浏览器前端（渲染进程）和本地 Node 服务（主进程）打包进同一个桌面程序，跨进程边界没守住就会卡死。',
+        },
+        '.hot.ts': {
+          tag: '性能 · 零分配热路径',
+          title: '.hot.ts 热路径文件约定',
+          plain: '用文件后缀标明“每帧 / 每 Tick 都会执行”的高频代码，配合 Lint 禁止在其中创建临时对象、闭包或调用 new。',
+          analog: '后端视角：跟高 QPS 核心链路禁止在循环里频繁 new 对象以防 GC STW 停顿是同一回事，只是游戏里是每秒 60 帧的主循环。',
+        },
+        'TLA+': {
+          tag: '形式化验证 · 状态机建模',
+          title: 'TLA+',
+          plain: '用来描述并发系统、状态机和分布式协议的形式化规格语言，由图灵奖得主 Leslie Lamport 设计。',
+          analog: '后端视角：单测只能测你手写的几个样例；TLA+ 把重试、超时、锁流转写成状态模型，让工具自动穷举所有并发交错顺序，专抓线上偶发竞态 Bug。',
+        },
+        TLC: {
+          tag: '形式化验证 · 模型检验器',
+          title: 'TLC 模型检验器',
+          plain: '运行 TLA+ 规格的自动检验工具，会遍历状态空间检查是否违反你定义的不变量。',
+          analog: '后端视角：相当于并发状态机的“穷举式死锁/竞态扫描器”，一旦撞到违规状态会直接吐出最短复现步骤链。',
+        },
+        Lean: {
+          tag: '形式化验证 · 定理证明',
+          title: 'Lean 定理证明器',
+          plain: '交互式数学证明与函数式编程语言，用于严格证明核心算法的属性。',
+          analog: '后端视角：测试证明“这 100 组输入没出错”，Lean 则在数学上证明“对所有合法输入都绝不会越界或出错”，适合底层的索引/调度算法。',
+        },
+        可辨识联合类型: {
+          tag: '类型系统 · 状态互斥',
+          title: '可辨识联合类型（Discriminated Union）',
+          plain: 'TypeScript 里用一个固定标签字段（如 status）区分多种互斥数据结构的写法。',
+          analog: '后端视角：等价于 Rust 的 enum 或 Java 的 sealed interface——在编译期把“loading 和 error 同时存在”这类非法状态彻底挡掉。',
+        },
+        'Branded Type': {
+          tag: '类型系统 · 防传参错位',
+          title: 'Branded Type（品牌类型）',
+          plain: '在 TypeScript 里给相同底层类型（如 string）贴上编译期标签，使不同业务 ID 互不兼容。',
+          analog: '后端视角：类似 Newtype 模式（如把 UserId 和 OrderId 区分成两个强类型），传反参数顺序编译直接报红，且运行时零额外开销。',
+        },
+        'Feature Map': {
+          tag: '验证基建 · 功能地图',
+          title: 'Feature Map（功能地图）',
+          plain: '写在项目验证技能里的用户视角功能索引，列明每个功能怎么进入、怎么操作、怎么判定正常。',
+          analog: '后端视角：类似给新入职同事准备的“核心接口与验收路由表”，让不同会话里的 Agent 不用每次盲翻全仓库猜入口。',
+        },
+        Fuzz: {
+          tag: '自动化测试 · 模糊测试',
+          title: 'Fuzz / 模糊测试',
+          plain: '由自动化脚本持续向系统注入随机、异常或边界操作序列，主动触发崩溃与异常状态。',
+          analog: '后端视角：跟接口压测/随机畸形报文探测一样，只是这里让脚本像真人一样乱点整个客户端，把藏得深的边界 Bug 撞出来。',
+        },
+        模糊测试: {
+          tag: '自动化测试 · 模糊测试',
+          title: '模糊测试（Fuzzing）',
+          plain: '由脚本持续生成随机或极端操作序列遍历应用，专门寻找人工用例想不到的崩溃与死角。',
+          analog: '后端视角：类似给接口灌畸形参数和乱序请求，自动把未处理的异常路径暴露出来。',
+        },
+        虚拟列表: {
+          tag: '前端渲染 · 窗口化列表',
+          title: '虚拟列表（Virtualization）',
+          plain: '展示几万条数据时只渲染当前屏幕可见的那十几条 DOM 节点，滚动时动态复用以保流畅。',
+          analog: '后端视角：类似游标分页只在内存里保留当前窗口数据；若元素高度异步测量和滚动帧不同步，就会出现画面闪烁抖动。',
+        },
+        Worktree: {
+          tag: 'Git · 多工作树',
+          title: 'Git Worktree',
+          plain: '允许同一个本地 Git 仓库同时把不同分支检出到多个独立文件夹中并行修改。',
+          analog: '后端视角：不用重复 clone 整个大仓库，就能让 3 个并发 Agent 在各自隔离的目录里改代码和跑测试，互不踩工作区。',
+        },
+        'Few-shot Examples': {
+          tag: '大模型 · 少样本示例',
+          title: 'Few-shot Examples（少样本输入）',
+          plain: '模型在生成结果前参考的上下文样例——在编码 Agent 场景里，仓库里的存量代码就是最大样例库。',
+          analog: '后端视角：相当于新人进组前翻看老代码照葫芦画瓢；仓库里留着一处临时补丁，后续 Agent 就会当成标准写法到处复制。',
+        },
+        Diátaxis: {
+          tag: '文档工程 · 四象限框架',
+          title: 'Diátaxis 文档框架',
+          plain: '把技术文档严格分成四类：教程（Tutorial）、操作指南（How-to）、参考手册（Reference）和原理解释（Explanation）。',
+          analog: '后端视角：避免把“新手快速上手”“排障步骤”和“API 参数表”全糊进同一篇 README 里，让文档结构一眼清晰。',
+        },
+      };
+
+      const TERM_KEYS = Object.keys(GLOSSARY).sort((a, b) => b.length - a.length);
+      const TERM_REGEX = new RegExp(
+        '(' +
+          TERM_KEYS.map((k) => {
+            const esc = k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const pre = /^[A-Za-z]/.test(k) ? '(?<![A-Za-z0-9_-])' : '';
+            const suf = /[A-Za-z]$/.test(k) ? '(?![A-Za-z0-9_-])' : '';
+            return pre + esc + suf;
+          }).join('|') +
+          ')',
+        'g'
+      );
+      const SKIP_TAGS = new Set(['CODE', 'PRE', 'A', 'BUTTON', 'H1', 'SCRIPT', 'STYLE', 'TEXTAREA', 'INPUT']);
+
+      function annotateTerms(root) {
+        if (!root) return;
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+        const nodes = [];
+        let node;
+        while ((node = walker.nextNode())) {
+          if (!node.nodeValue || !TERM_REGEX.test(node.nodeValue)) continue;
+          TERM_REGEX.lastIndex = 0;
+          let p = node.parentElement;
+          let skip = false;
+          while (p && p !== root) {
+            if (SKIP_TAGS.has(p.tagName) || p.classList.contains('pg-term')) {
+              skip = true;
+              break;
+            }
+            p = p.parentElement;
+          }
+          if (!skip) nodes.push(node);
+        }
+        nodes.forEach((textNode) => {
+          const text = textNode.nodeValue;
+          TERM_REGEX.lastIndex = 0;
+          const frag = document.createDocumentFragment();
+          let last = 0;
+          let match;
+          while ((match = TERM_REGEX.exec(text))) {
+            const idx = match.index;
+            const term = match[0];
+            if (idx > last) frag.appendChild(document.createTextNode(text.slice(last, idx)));
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'pg-term';
+            btn.dataset.term = term;
+            btn.textContent = term;
+            frag.appendChild(btn);
+            last = idx + term.length;
+          }
+          if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+          textNode.parentNode.replaceChild(frag, textNode);
+        });
+      }
+
+      const popover = document.getElementById('pgPopover');
+      const popTag = document.getElementById('pgPopTag');
+      const popTitle = document.getElementById('pgPopTitle');
+      const popPlain = document.getElementById('pgPopPlain');
+      const popAnalog = document.getElementById('pgPopAnalog');
+      const popClose = document.getElementById('pgPopClose');
+      let activeTermEl = null;
+      let hideTimer = null;
+
+      function hidePopover() {
+        clearTimeout(hideTimer);
+        popover.classList.remove('is-visible');
+        popover.setAttribute('aria-hidden', 'true');
+        if (activeTermEl) {
+          activeTermEl.classList.remove('is-open');
+          activeTermEl = null;
+        }
+      }
+
+      function showPopover(target) {
+        clearTimeout(hideTimer);
+        const key = target.dataset.term;
+        const entry = GLOSSARY[key];
+        if (!entry) return;
+        if (activeTermEl && activeTermEl !== target) activeTermEl.classList.remove('is-open');
+        activeTermEl = target;
+        activeTermEl.classList.add('is-open');
+
+        popTag.textContent = entry.tag;
+        popTitle.textContent = entry.title;
+        popPlain.textContent = entry.plain;
+        popAnalog.textContent = entry.analog;
+
+        popover.classList.add('is-visible');
+        popover.setAttribute('aria-hidden', 'false');
+
+        const rect = target.getBoundingClientRect();
+        const popW = popover.offsetWidth || 320;
+        const popH = popover.offsetHeight || 160;
+        let left = rect.left + rect.width / 2 - popW / 2;
+        left = Math.max(12, Math.min(window.innerWidth - popW - 12, left));
+        let top = rect.bottom + 8;
+        if (top + popH > window.innerHeight - 12) {
+          top = Math.max(12, rect.top - popH - 8);
+        }
+        popover.style.left = Math.round(left) + 'px';
+        popover.style.top = Math.round(top) + 'px';
+      }
+
+      const stageEl = document.querySelector('.pg-stage');
+      stageEl.addEventListener('click', (e) => {
+        const termBtn = e.target.closest('.pg-term');
+        if (termBtn) {
+          e.stopPropagation();
+          if (activeTermEl === termBtn && popover.classList.contains('is-visible')) {
+            hidePopover();
+          } else {
+            showPopover(termBtn);
+          }
+        }
+      });
+      stageEl.addEventListener('mouseover', (e) => {
+        const termBtn = e.target.closest('.pg-term');
+        if (termBtn) showPopover(termBtn);
+      });
+      stageEl.addEventListener('mouseout', (e) => {
+        const termBtn = e.target.closest('.pg-term');
+        if (termBtn) {
+          hideTimer = setTimeout(() => {
+            if (!popover.matches(':hover')) hidePopover();
+          }, 180);
+        }
+      });
+      popover.addEventListener('mouseenter', () => clearTimeout(hideTimer));
+      popover.addEventListener('mouseleave', () => {
+        hideTimer = setTimeout(hidePopover, 160);
+      });
+      popClose.addEventListener('click', hidePopover);
+      document.addEventListener('click', (e) => {
+        if (!popover.contains(e.target) && !e.target.closest('.pg-term')) hidePopover();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') hidePopover();
+      });
+
       const pyramidDetail = document.getElementById('pgPyramidDetail');
       function renderPyramid(tier) {
         const d = PYRAMID_DATA[tier];
@@ -1530,9 +1954,10 @@ const jsonLd = {
         pyramidDetail.innerHTML =
           '<div class="pg-eyebrow" style="margin-bottom:6px;">' + d.badge + '</div>' +
           '<h3 style="font-size:21px;margin-bottom:10px;">' + d.title + '</h3>' +
-          '<p><strong>核心逻辑：</strong>' + d.why + '</p>' +
-          '<p><strong>真实落地例子：</strong>' + d.example + '</p>' +
+          '<p><strong>设计逻辑：</strong>' + d.why + '</p>' +
+          '<p><strong>工程实例：</strong>' + d.example + '</p>' +
           '<p style="font-size:15px;color:var(--brand);margin-top:8px;margin-bottom:0;">' + d.pstack + '</p>';
+        annotateTerms(pyramidDetail);
       }
       document.querySelectorAll('.pg-pyr-tier').forEach((b) => b.addEventListener('click', () => renderPyramid(b.dataset.tier)));
       renderPyramid('1');
@@ -1544,9 +1969,10 @@ const jsonLd = {
         const stepsHtml = s.steps.map((item) => '<li style="margin:6px 0;"><strong>' + item[0] + '：</strong>' + item[1] + '</li>').join('');
         scenarioBox.innerHTML =
           '<div class="pg-split" style="margin-top:0;">' +
-            '<div class="pg-box"><span class="pg-box-label">普通做法（留在倒金字塔底层）</span><p style="margin:0;">' + s.bad + '</p></div>' +
-            '<div class="pg-box is-good"><span class="pg-box-label">土豆姐做法（沿倒金字塔往上焊死）</span><ul style="margin:0;padding-left:1.2em;">' + stepsHtml + '</ul></div>' +
+            '<div class="pg-box"><span class="pg-box-label">常见做法（停留在文档软约束）</span><p style="margin:0;">' + s.bad + '</p></div>' +
+            '<div class="pg-box is-good"><span class="pg-box-label">pstack 做法（沿倒金字塔向上升级）</span><ul style="margin:0;padding-left:1.2em;">' + stepsHtml + '</ul></div>' +
           '</div>';
+        annotateTerms(scenarioBox);
       }
       document.querySelectorAll('#pgScenarioBtns .pg-seg-btn').forEach((b) => b.addEventListener('click', () => renderScenario(b.dataset.scene)));
       renderScenario('timer');
@@ -1577,6 +2003,7 @@ const jsonLd = {
           ).join('') + '</div>';
         }
         archDetail.innerHTML = html;
+        annotateTerms(archDetail);
         archDetail.querySelectorAll('#pgSkillGroupTabs .pg-seg-btn').forEach((btn) => {
           btn.addEventListener('click', () => {
             currentSkillGroup = btn.dataset.group;
@@ -1594,12 +2021,13 @@ const jsonLd = {
         document.querySelectorAll('#pgStepper .pg-step-btn').forEach((b) => b.classList.toggle('is-active', Number(b.dataset.step) === currentWalkStep));
         walkthroughDetail.innerHTML =
           '<h3 style="font-size:21px;margin-bottom:10px;">' + item.title + '</h3>' +
-          '<div style="font-size:14px;color:var(--stone);margin-bottom:4px;">人类给的提示词 / 动作</div>' +
+          '<div style="font-size:14px;color:var(--stone);margin-bottom:4px;">开发者输入的指令 / 触发条件</div>' +
           '<pre><code>' + item.prompt + '</code></pre>' +
           '<div class="pg-split">' +
-            '<div class="pg-box"><span class="pg-box-label">pstack 内部发生了什么</span><p style="margin:0;">' + item.inside + '</p></div>' +
-            '<div class="pg-box is-good"><span class="pg-box-label">这一步交付的硬结果</span><p style="margin:0;">' + item.output + '</p></div>' +
+            '<div class="pg-box"><span class="pg-box-label">pstack 内部调度动作</span><p style="margin:0;">' + item.inside + '</p></div>' +
+            '<div class="pg-box is-good"><span class="pg-box-label">当前阶段交付产物</span><p style="margin:0;">' + item.output + '</p></div>' +
           '</div>';
+        annotateTerms(walkthroughDetail);
       }
       document.querySelectorAll('#pgCaseToggle .pg-seg-btn').forEach((b) => b.addEventListener('click', () => {
         currentWalkCase = b.dataset.case;
@@ -1622,9 +2050,12 @@ const jsonLd = {
           '<h3 style="font-size:21px;margin-bottom:6px;">' + d.title + '</h3>' +
           '<p style="color:var(--olive);font-size:15px;">' + d.intro + '</p>' +
           '<div class="pg-skill-grid">' + grid + '</div>';
+        annotateTerms(showcaseBox);
       }
       document.querySelectorAll('#pgShowcaseBtns .pg-seg-btn').forEach((b) => b.addEventListener('click', () => renderShowcase(b.dataset.case)));
       renderShowcase('tibo');
+
+      annotateTerms(stageEl);
 
       const STORAGE_KEY = 'sunsky-pstack-guide-checklist-v1';
       const checkboxes = Array.from(document.querySelectorAll('.pstack-guide input[type="checkbox"][data-check]'));
@@ -1637,17 +2068,17 @@ const jsonLd = {
         const done = checkboxes.filter((cb) => cb.checked).length;
         const pct = Math.round((done / total) * 100);
         scoreFill.style.width = pct + '%';
-        let stageText = '刚起步';
-        let advice = '先拿下第 1 阶段的 3 个习惯，不用改一行配置，今天就能把 AI 返工率打下来一半。';
+        let stageText = '起步阶段';
+        let advice = '建议先落地第 1 阶段的 3 项协作习惯，无需改动项目配置，即可显著降低因理解偏差导致的返工。';
         if (done >= 3 && done < 6) {
-          stageText = '协作已顺手 · 准备建护栏';
-          advice = '你的提问方式已经到位，下一步把精力放到第 2 阶段：统一验证命令 + 功能地图 + 2 条高价值 Lint。';
+          stageText = '协作习惯已就绪 · 待补齐静态护栏';
+          advice = '任务交接方式已建立，下一步建议推进第 2 阶段：收敛统一验证命令、编写核心路径 Feature Map，并落地 2–3 条带修复提示的 Lint。';
         } else if (done >= 6 && done < 9) {
-          stageText = '高信任内环成型';
-          advice = '你已经跑赢绝大多数 AI 编程团队了。接下来可以在关键状态机或并发模块试水形式化验证与多路并行。';
+          stageText = '单机高信任内环已成型';
+          advice = '项目已具备扎实的内环拦截能力。接下来可在复杂状态机或高并发模块尝试形式化验证（TLA+ / 状态图）与独立 Worktree 多路并行。';
         } else if (done === 9) {
-          stageText = '软件工厂就绪';
-          advice = '内环扎实、证据闭环，你已经具备让多 Agent 放心并行甚至过夜交付的基础设施。';
+          stageText = '内环与外环全面就绪';
+          advice = '静态约束与运行时实证均已到位，具备支撑多 Agent 并行交付与夜间自动化运行的基础设施。';
         }
         scoreLabel.textContent = '已完成 ' + done + ' / ' + total + ' 项 · ' + stageText;
         scoreAdvice.textContent = advice;
