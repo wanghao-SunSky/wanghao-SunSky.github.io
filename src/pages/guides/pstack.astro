@@ -1,0 +1,1680 @@
+---
+import Base from '../../layouts/Base.astro';
+import { SITE, AUTHOR } from '../../data/site';
+
+const title = '土豆姐与 pstack：Agent 工程开发理论互动导读 | SunSky';
+const description =
+  '由宏观到微观、由易到难，用 6 章互动图解拆解 Lauren Tan（@poteto / 土豆姐）的信任倒金字塔、代码库园艺学与 cursor/plugins/pstack 四层架构。';
+const canonical = `${SITE.url}/guides/pstack/`;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  headline: '土豆姐与 pstack：Agent 工程开发理论互动导读',
+  description,
+  url: canonical,
+  image: `${SITE.url}/og/pstack-poteto-guide.png`,
+  inLanguage: SITE.lang,
+  author: { '@type': 'Person', name: AUTHOR.name, url: AUTHOR.github },
+};
+---
+
+<Base
+  title={title}
+  description={description}
+  ogType="article"
+  ogImage="/og/pstack-poteto-guide.png"
+  jsonLd={jsonLd}
+>
+  <main class="pstack-guide">
+    <div class="pg-toolbar" role="region" aria-label="互动导读章节控制">
+      <div class="pg-toolbar-top">
+        <div class="pg-brand">
+          <span>互动导读 · pstack</span>
+          <span class="pg-orbit" aria-hidden="true"><span class="pg-dot"></span></span>
+        </div>
+        <nav class="pg-tabs" role="tablist" aria-label="章节导航">
+          <button class="pg-tab" role="tab" data-chapter="0" aria-selected="true">01 破题</button>
+          <button class="pg-tab" role="tab" data-chapter="1" aria-selected="false">02 心法</button>
+          <button class="pg-tab" role="tab" data-chapter="2" aria-selected="false">03 架构</button>
+          <button class="pg-tab" role="tab" data-chapter="3" aria-selected="false">04 实战</button>
+          <button class="pg-tab" role="tab" data-chapter="4" aria-selected="false">05 案例</button>
+          <button class="pg-tab" role="tab" data-chapter="5" aria-selected="false">06 落地</button>
+        </nav>
+        <div class="pg-actions">
+          <a class="pg-link-btn" href="/posts/pstack-poteto-guide/">文字版</a>
+          <button class="pg-theme-btn" id="pgThemeToggle" type="button" title="切换暖纸浅色与暖夜纸深色">切夜纸</button>
+        </div>
+      </div>
+
+      <div class="pg-ladder">
+        <div class="pg-scale" aria-label="认知阶梯">
+          <span>阅读阶梯：</span>
+          <span class="pg-pill active" id="pg-pill-macro">宏观定调</span>
+          <span>→</span>
+          <span class="pg-pill" id="pg-pill-meso">中观结构</span>
+          <span>→</span>
+          <span class="pg-pill" id="pg-pill-micro">微观实操</span>
+        </div>
+        <div class="pg-progress">
+          <span class="pg-num" id="pgProgressText">第 1 / 6 章</span>
+          <div class="pg-track" aria-hidden="true">
+            <div class="pg-fill" id="pgProgressFill" style="width: 16.67%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pg-stage">
+      <!-- ==================== CH 01 ==================== -->
+      <section class="pg-panel is-active" data-panel="0" data-level="macro">
+        <div class="pg-head">
+          <div class="pg-eyebrow">第 01 章 · 宏观破题 · 入门</div>
+          <h1>先理清头绪：土豆姐和 pstack 到底是什么关系？</h1>
+          <p class="pg-lede">
+            很多人看网上讨论越看越绕，是因为把<strong>人、理论、工具、案例</strong>混成了一锅粥。其实全套内容只有一条主线：当 AI 写代码比人快 100 倍之后，工程师的核心工作不再是“敲代码”，而是<strong>搭建一个让 Agent 默认做对事的高信任环境</strong>。
+          </p>
+        </div>
+
+        <div class="pg-grid-3">
+          <div class="pg-card">
+            <h3>道 · 底层心法</h3>
+            <p class="pg-muted">
+              Lauren Tan（<code>@poteto</code>，中文圈称“土豆姐”，React Compiler 核心成员，现 SpaceXSI Grok Bot 负责人）提出的<strong>信任倒金字塔</strong>与<strong>代码库园艺学</strong>。
+            </p>
+          </div>
+          <div class="pg-card">
+            <h3>器 · 工具落地</h3>
+            <p class="pg-muted">
+              她开源在 <code>cursor/plugins/pstack</code> 的工程技能包（59 Skills + 22 Playbooks + 2 Subagents），把心法封装成可复用的日常工作流。
+            </p>
+          </div>
+          <div class="pg-card">
+            <h3>证 · 极限压测</h3>
+            <p class="pg-muted">
+              单人月合入 2,500–3,000 PR（团队 11,000 PR，回滚率约 0.5%），以及 4 天 1,150 PR 做出生存游戏 <code>tibo.dog</code> 的公开战绩。
+            </p>
+          </div>
+        </div>
+
+        <div class="pg-card-sand">
+          <h3>全套理论浓缩成一句话</h3>
+          <p>
+            <strong>“If you want to go fast, go deep first.”（想跑得快，必须先扎得深。）</strong><br />
+            不要追求“20 个垃圾制造机同时飙代码”的假吞吐。先把单个 Agent 的护栏、验证和自证能力打穿，你才敢放心并行、甚至睡觉时让它自己把 PR 合并上线。
+          </p>
+        </div>
+
+        <div class="pg-section">
+          <h2>先解开最容易让人绕晕的 3 个“伪矛盾”</h2>
+          <p class="pg-muted">点击下方卡片，把网上传得最混乱的三个冲突点一次说透：</p>
+
+          <div class="pg-paradox-list">
+            <div class="pg-paradox-item is-open">
+              <button class="pg-paradox-trigger" type="button" aria-expanded="true">
+                <span>矛盾一：一边反对往 AGENTS.md 堆规则，一边自己写了 59 个 Markdown Skills？</span>
+                <span class="pg-badge">点击收起</span>
+              </button>
+              <div class="pg-paradox-body">
+                <p style="margin-top: 12px;">二者解决的根本不是同一类问题。</p>
+                <div class="pg-split">
+                  <div class="pg-box">
+                    <span class="pg-box-label">她反对的（堆 AGENTS.md）</span>
+                    AI 每次犯错就往文档里追加一句“禁止用 X、记得检查 Y”。这种文字规则<strong>不报错、不拦截</strong>，堆到几百行以后模型照样无视。
+                  </div>
+                  <div class="pg-box is-good">
+                    <span class="pg-box-label">pstack 做的（59 个 Skills）</span>
+                    封装的是<strong>通用工程动作</strong>（怎么复现、怎么写原型、怎么验证）以及<strong>把文字教训升级成代码检查的工具</strong>（如 <code>/correct</code>、<code>/no-comments</code>）。
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="pg-paradox-item">
+              <button class="pg-paradox-trigger" type="button" aria-expanded="false">
+                <span>矛盾二：一边说“我不相信 Plan Mode”，一边又最强调前期架构？</span>
+                <span class="pg-badge">点击展开</span>
+              </button>
+              <div class="pg-paradox-body">
+                <p style="margin-top: 12px;">她反感的是“纯纸面、脱离代码的长篇实施计划”，而不是反对思考。</p>
+                <div class="pg-split">
+                  <div class="pg-box">
+                    <span class="pg-box-label">纸面 Plan Mode 的坑</span>
+                    过度规定实现细节，却漏掉关键接口约束；对着抽象文档做评审时，AI 会凭空编造一堆根本不会发生的边缘风险，制造“今天干了好多活”的假象。
+                  </div>
+                  <div class="pg-box is-good">
+                    <span class="pg-box-label">她的替代做法：用代码做计划</span>
+                    先写 <strong>README / 使用教程</strong>倒推 API，用 <code>/architect</code> 画类型签名草图，拿不准的交互直接写 2–3 个<strong>一次性原型</strong>跑出来比对。
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="pg-paradox-item">
+              <button class="pg-paradox-trigger" type="button" aria-expanded="false">
+                <span>矛盾三：为什么要禁掉 99% 的代码注释，甚至质疑传统 Clean Code？</span>
+                <span class="pg-badge">点击展开</span>
+              </button>
+              <div class="pg-paradox-body">
+                <p style="margin-top: 12px;">在 Agent 时代，<strong>代码库本身就是下一个 Agent 最大的输入样本</strong>。</p>
+                <div class="pg-split">
+                  <div class="pg-box">
+                    <span class="pg-box-label">注释为什么变成“病毒”</span>
+                    AI 喜欢用注释给自己偷懒打圆场（比如写一段注释解释为什么这里加了 <code>setTimeout</code> 补丁）。下一个 Agent 读到后，会把它当成“祖传规范”疯狂复制。
+                  </div>
+                  <div class="pg-box is-good">
+                    <span class="pg-box-label">面向 Agent 的好代码标准</span>
+                    注释无法被机器强制执行。需要解释的地方，要么改好命名、要么写测试、要么做成类型或 Lint 报错——报错信息里直接写明正确用法。
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== CH 02 ==================== -->
+      <section class="pg-panel" data-panel="1" data-level="macro">
+        <div class="pg-head">
+          <div class="pg-eyebrow">第 02 章 · 底层心法（道） · 基础</div>
+          <h1>信任倒金字塔与代码库园艺学</h1>
+          <p class="pg-lede">
+            如果只能从土豆姐的全部演讲里带走一个模型，就是下面这座<strong>信任倒金字塔（Trust Inverted Pyramid）</strong>。它回答了一个根本问题：你的工程时间应该砸在哪一层，才能换来最高的 AI 可信度？
+          </p>
+        </div>
+
+        <h2>互动图解：点击倒金字塔每一层，看它怎么管住 Agent</h2>
+        <p class="pg-muted">越往上面积越宽、确定性越强、越省 Token，应该投入最多精力；越往下越昂贵、越难扩展。</p>
+
+        <div class="pg-pyramid" id="pgPyramid">
+          <button class="pg-pyr-tier is-active" type="button" data-tier="1">
+            <span class="pg-pyr-title">第 1 层 · 代码库与 API 架构（投入最多）</span>
+            <span class="pg-pyr-sub">100% 确定性 · 根除错误</span>
+          </button>
+          <button class="pg-pyr-tier" type="button" data-tier="2">
+            <span class="pg-pyr-title">第 2 层 · 静态分析 / 类型 / Lint / 验证</span>
+            <span class="pg-pyr-sub">确定性拦截 · 自动纠偏</span>
+          </button>
+          <button class="pg-pyr-tier" type="button" data-tier="3">
+            <span class="pg-pyr-title">第 3 层 · 散文规则（AGENTS.md / Skills）</span>
+            <span class="pg-pyr-sub">软约束 · 只留主观判断</span>
+          </button>
+          <button class="pg-pyr-tier" type="button" data-tier="4">
+            <span class="pg-pyr-title">第 4 层 · 人工 Review（尽量缩到最窄）</span>
+            <span class="pg-pyr-sub">不可扩展 · 只审证据</span>
+          </button>
+        </div>
+
+        <div class="pg-card" id="pgPyramidDetail"></div>
+
+        <div class="pg-section">
+          <h2>代码库园艺学：为什么说“修补丁”反而是在投毒？</h2>
+          <p>
+            2024 年上班一天看同事 3 个 PR；现在带着几十上百个 Agent，一天涌进来 300 个 PR。代码不再像盖砖墙，而像<strong>持续生长的花园</strong>。
+          </p>
+          <p>
+            因为 Agent 天生会模仿仓库里已有的代码抄近路，你留下一处临时 workaround（杂草），下一个 Agent 就会以为这是标准写法，迅速复制成满园荒草。所以工程师的新角色是<strong>园艺师</strong>：一边拔草（删死代码、清旧模式），一边给每根拔掉的草立一条机器铁律，让它永远长不回来。
+          </p>
+        </div>
+
+        <div class="pg-section">
+          <h2>互动推演：当 AI 反复犯同一个错，怎么把教训焊进系统？</h2>
+          <p class="pg-muted">选一个真实开发中常见的 AI 坏毛病，对比“写文档提醒”和“土豆姐的升级阶梯”：</p>
+          <div class="pg-seg-row" id="pgScenarioBtns">
+            <button class="pg-seg-btn is-active" type="button" data-scene="timer">痛点 1：乱写 setTimeout 凑时序</button>
+            <button class="pg-seg-btn" type="button" data-scene="import">痛点 2：渲染层误引主进程代码</button>
+            <button class="pg-seg-btn" type="button" data-scene="comment">痛点 3：写注释掩盖临时补丁</button>
+          </div>
+          <div class="pg-card" id="pgScenarioBox"></div>
+        </div>
+      </section>
+
+      <!-- ==================== CH 03 ==================== -->
+      <section class="pg-panel" data-panel="2" data-level="meso">
+        <div class="pg-head">
+          <div class="pg-eyebrow">第 03 章 · 工具拆解（器） · 中观</div>
+          <h1>一张图看懂 pstack：别被 59 个技能吓到</h1>
+          <p class="pg-lede">
+            打开 <code>cursor/plugins/pstack</code> 仓库，你会看到 <strong>59 个 Skills、22 个 Playbooks、2 个 Subagents</strong>。新手最容易在这里懵掉——以为要背 59 条命令。其实它是一个极克制的<strong>“单入口 + 四层分工”</strong>系统。
+          </p>
+        </div>
+
+        <h2>点击任意一层，拆解它的职责与内部零件</h2>
+        <div class="pg-arch-stack" id="pgArchStack">
+          <button class="pg-arch-layer is-active" type="button" data-layer="0">
+            <span class="pg-arch-num">第 1 层 · 入口</span>
+            <span class="pg-arch-name">路由总调度台（/poteto-mode）</span>
+            <span class="pg-arch-hint">人只管说目标</span>
+          </button>
+          <button class="pg-arch-layer" type="button" data-layer="1">
+            <span class="pg-arch-num">第 2 层 · 剧本</span>
+            <span class="pg-arch-name">22 套场景剧本（Playbooks）</span>
+            <span class="pg-arch-hint">规定先干啥后干啥</span>
+          </button>
+          <button class="pg-arch-layer" type="button" data-layer="2">
+            <span class="pg-arch-num">第 3 层 · 技能</span>
+            <span class="pg-arch-name">35 个功能技能 + 2 个子 Agent</span>
+            <span class="pg-arch-hint">按步骤自动调用</span>
+          </button>
+          <button class="pg-arch-layer" type="button" data-layer="3">
+            <span class="pg-arch-num">第 4 层 · 原则</span>
+            <span class="pg-arch-name">24 条工程原则（Principles）</span>
+            <span class="pg-arch-hint">决定取舍底线</span>
+          </button>
+        </div>
+
+        <div class="pg-card" id="pgArchDetail"></div>
+
+        <div class="pg-card-sand">
+          <h3>pstack 最精妙的架构设计：把“流程”与“原则”彻底拆开</h3>
+          <p class="pg-muted-body">
+            大多数人写 Prompt 会把“步骤”和“质量要求”揉成一坨千字长文，模型一长就忘。<code>pstack</code> 把 <strong>Playbook（做什么步骤）</strong> 和 <strong>Principle（怎么做判断）</strong> 解耦：启动任务时先加载原则索引，中途如果 Agent 走偏，你甚至不用写长篇解释，直接喊出一条原则名字（例如 <code>Attack the Premise</code> 或 <code>Laziness Protocol</code>），就能瞬间把它拉回正轨。
+          </p>
+        </div>
+      </section>
+
+      <!-- ==================== CH 04 ==================== -->
+      <section class="pg-panel" data-panel="3" data-level="meso">
+        <div class="pg-head">
+          <div class="pg-eyebrow">第 04 章 · 全链路实战（术） · 进阶</div>
+          <h1>串起来看：一个真实需求怎么跑完 5 步闭环</h1>
+          <p class="pg-lede">
+            明白了心法和 4 层结构后，我们把零散的技能串成一条直线。选一个真实任务场景，从第 1 步点到第 5 步，看看土豆姐平时到底怎么和 Agent 配合。
+          </p>
+        </div>
+
+        <div class="pg-seg-row" id="pgCaseToggle">
+          <button class="pg-seg-btn is-active" type="button" data-case="bug">场景 A：修一个重试导致重复通知的 Bug</button>
+          <button class="pg-seg-btn" type="button" data-case="feature">场景 B：重做一套不闪烁的虚拟列表引擎</button>
+        </div>
+
+        <div class="pg-stepper" id="pgStepper">
+          <button class="pg-step-btn is-active" type="button" data-step="0">
+            <span class="pg-step-idx">Step 1</span>
+            <span>间接提需求</span>
+          </button>
+          <button class="pg-step-btn" type="button" data-step="1">
+            <span class="pg-step-idx">Step 2</span>
+            <span>摸清前世今生</span>
+          </button>
+          <button class="pg-step-btn" type="button" data-step="2">
+            <span class="pg-step-idx">Step 3</span>
+            <span>用代码定方案</span>
+          </button>
+          <button class="pg-step-btn" type="button" data-step="3">
+            <span class="pg-step-idx">Step 4</span>
+            <span>双重实证验收</span>
+          </button>
+          <button class="pg-step-btn" type="button" data-step="4">
+            <span class="pg-step-idx">Step 5</span>
+            <span>清理与固化</span>
+          </button>
+        </div>
+
+        <div class="pg-card" id="pgWalkthroughDetail"></div>
+
+        <div class="pg-card-sand">
+          <h3>为什么她约 70% 的 Token 都花在第 4 步（验证）？</h3>
+          <p class="pg-muted-body">
+            传统开发里，写测试、建状态机模型、做 UI 自动化很费人力，所以大家能省就省。但 Agent 把“写验证代码”的成本打到了接近零——我们正进入<strong>软件测试与形式化验证的黄金时代</strong>。当你把大部分算力投在“让 Agent 自己跑真软件 + 用 TLA+ 穷举状态路径”，人工 Review 就从“肉眼扫 2,000 行代码”收缩成“看 10 秒录屏和一张状态图”。
+          </p>
+        </div>
+      </section>
+
+      <!-- ==================== CH 05 ==================== -->
+      <section class="pg-panel" data-panel="4" data-level="micro">
+        <div class="pg-head">
+          <div class="pg-eyebrow">第 05 章 · 极限案例与演进（证） · 微观</div>
+          <h1>从单兵到软件工厂：内环、外环与硬核招式</h1>
+          <p class="pg-lede">
+            很多人一上来就想搭“多 Agent 自动流水线”，结果只是 20 倍速生产垃圾代码。这一章拆解她从单兵走向高频合入的真实顺序、具体工程招式，以及她近期的观点修正。
+          </p>
+        </div>
+
+        <h2>顺序铁律：先打穿内环，再放大外环</h2>
+        <div class="pg-grid-2">
+          <div class="pg-card" style="margin: 0;">
+            <h3>内环（Inner Loop）· 单兵深度</h3>
+            <p class="pg-muted">决定每一次改动的质量下限，必须先做到“默认靠谱”。</p>
+            <div class="pg-chip-row">
+              <span class="pg-chip is-brand">干净代码库</span>
+              <span>→</span>
+              <span class="pg-chip is-brand">硬类型/Lint</span>
+              <span>→</span>
+              <span class="pg-chip is-brand">实证+形式验证</span>
+              <span>→</span>
+              <span class="pg-chip is-brand">窄 PR 自证</span>
+            </div>
+            <p class="pg-stone-note">
+              判定标准：你在旁边看着跑完几次，确认每个环节出错都能自己停线报错。
+            </p>
+          </div>
+          <div class="pg-card" style="margin: 0;">
+            <h3>外环（Outer Loop）· 规模工厂</h3>
+            <p class="pg-muted">只在内环稳固后开启，把单兵杠杆放大到 24×7。</p>
+            <div class="pg-chip-row">
+              <span class="pg-chip">收集反馈/报错</span>
+              <span>→</span>
+              <span class="pg-chip">多路云端 Agent</span>
+              <span>→</span>
+              <span class="pg-chip">自动 Fuzz 找虫</span>
+              <span>→</span>
+              <span class="pg-chip">自动开修合并</span>
+            </div>
+            <p class="pg-stone-note">
+              典型做法：每切一个新版本，Grok Bot 自动起项目模糊测试整个客户端，发现 Bug 直接提 PR 并走完验证合入。
+            </p>
+          </div>
+        </div>
+
+        <div class="pg-section">
+          <h2>真实案例陈列室：抽象理论怎么落成一行行硬约束？</h2>
+          <div class="pg-seg-row" id="pgShowcaseBtns">
+            <button class="pg-seg-btn is-active" type="button" data-case="tibo">案例 A：tibo.dog（4 天 1,150 PR 游戏）</button>
+            <button class="pg-seg-btn" type="button" data-case="dune">案例 B：Dune / Grok Bot（团队月发 11,000 PR）</button>
+          </div>
+          <div class="pg-card" id="pgShowcaseBox"></div>
+        </div>
+
+        <div class="pg-section">
+          <h2>别学过时的版本：土豆姐 2026 年 11 月的最新风向修正</h2>
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 26%;">话题</th>
+                <th style="width: 34%;">早期 / 常见理解</th>
+                <th style="width: 40%;">最新实战结论（2026.11）</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>多模型对抗评审</strong><br /><code>/interrogate</code></td>
+                <td>让多个模型互撕代码 Diff，挑出一堆潜在隐患。</td>
+                <td><strong>明确降温：</strong>她公开表示纯抽象代码评审大多浪费 Token，模型容易沉迷吹毛求疵和过度设计；正在减少 <code>/interrogate</code> 调用，把预算转投<strong>运行时实证 + 形式化验证</strong>。</td>
+              </tr>
+              <tr>
+                <td><strong>形式化验证</strong><br />TLA+ / Lean</td>
+                <td>把 TLA+ 当成“证明代码零 Bug 的银弹”。</td>
+                <td><strong>理性定位：</strong>数学只能证明“实现符合规格”，但规格是人定的。她做 <code>/statechart</code> 的核心价值是把隐式状态机画成图，让人类一眼判断<strong>“AI 到底理没理解我的意图”</strong>。</td>
+              </tr>
+              <tr>
+                <td><strong>技能包体积</strong><br /><code>pstack</code> 迭代</td>
+                <td>以为技能越全越长越厉害。</td>
+                <td><strong>持续做减法：</strong>持续删减瘦身（如 v0.15.46 大幅缩短 Skill 篇幅、Playbook 精简至 22 个），用更短更硬的规则替代冗长说教。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ==================== CH 06 ==================== -->
+      <section class="pg-panel" data-panel="5" data-level="micro">
+        <div class="pg-head">
+          <div class="pg-eyebrow">第 06 章 · 落地抄作业 · 实用清单</div>
+          <h1>普通开发者怎么用？3 阶段最小落地路径</h1>
+          <p class="pg-lede">
+            土豆姐在官方指南里反复提醒：<strong>第一天千万别照搬 59 个技能，也别上来就写 TLA+</strong>。按性价比从高到低分三步推进，勾掉你已经做到的项，马上能看清下一步该补哪块。
+          </p>
+        </div>
+
+        <div class="pg-card">
+          <div class="pg-meter-row">
+            <strong>你的高信任 Agent 工程成熟度</strong>
+            <span class="pg-num" id="pgScoreLabel">已完成 0 / 9 项 · 刚起步</span>
+          </div>
+          <div class="pg-meter-bar" aria-hidden="true">
+            <div class="pg-meter-fill" id="pgScoreFill" style="width: 0%;"></div>
+          </div>
+          <p class="pg-stone-note" id="pgScoreAdvice">
+            先拿下第 1 阶段的 3 个习惯，不用改一行配置，今天就能把 AI 返工率打下来一半。
+          </p>
+        </div>
+
+        <div class="pg-card">
+          <h3>第 1 阶段 · 今天就能改的 3 个协作习惯（零成本）</h3>
+          <div class="pg-check-group">
+            <label class="pg-check-item">
+              <input type="checkbox" data-check="s1-1" />
+              <span>
+                <span class="pg-check-title">提需求只给“目标 + 可判真假的验收条件”，不再微操实现步骤</span>
+                <span class="pg-check-note">不说“帮我优化一下”，改说“重试不再产生重复记录，把复现失败和修复通过的真实命令输出贴给我”。</span>
+              </span>
+            </label>
+            <label class="pg-check-item">
+              <input type="checkbox" data-check="s1-2" />
+              <span>
+                <span class="pg-check-title">复杂任务动工前，先让 AI 用大白话复述问题</span>
+                <span class="pg-check-note">对应 <code>/in-your-own-words</code>：第一时间把理解偏差按死在写第一行代码之前。</span>
+              </span>
+            </label>
+            <label class="pg-check-item">
+              <input type="checkbox" data-check="s1-3" />
+              <span>
+                <span class="pg-check-title">同一假设连修 2 次还报错，立刻喊停换假设</span>
+                <span class="pg-check-note">对应原则 <code>Attack the Premise</code>：写下你暗中相信的前提并直接写脚本证伪，拒绝死磕补丁。</span>
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <div class="pg-card">
+          <h3>第 2 阶段 · 本周给项目搭起来的 3 块底座（性价比最高）</h3>
+          <div class="pg-check-group">
+            <label class="pg-check-item">
+              <input type="checkbox" data-check="s2-1" />
+              <span>
+                <span class="pg-check-title">把项目验证收口成 1 条统一命令</span>
+                <span class="pg-check-note">让每个 Agent 都跑同一条 verify 命令输出通过/失败表，避免 5 个 Agent 各自发明 5 套测法浪费 Token。</span>
+              </span>
+            </label>
+            <label class="pg-check-item">
+              <input type="checkbox" data-check="s2-2" />
+              <span>
+                <span class="pg-check-title">写一份 3–5 个核心路径的 Feature Map（功能地图）</span>
+                <span class="pg-check-note">用用户视角记录页面入口、关键按钮和预期状态，给人类和 Agent 建立同一套词典，顺便省掉大量摸索 Token。</span>
+              </span>
+            </label>
+            <label class="pg-check-item">
+              <input type="checkbox" data-check="s2-3" />
+              <span>
+                <span class="pg-check-title">把最近反复纠正的 2–3 个 AI 坏习惯，升格为带修复提示的 Lint / 类型约束</span>
+                <span class="pg-check-note">记住规则：同错出现 2 次才建规则；新规则必须先在历史坏代码上跑红过，才算有效拦截。</span>
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <div class="pg-card">
+          <h3>第 3 阶段 · 面向复杂系统与多 Agent 的进阶打法</h3>
+          <div class="pg-check-group">
+            <label class="pg-check-item">
+              <input type="checkbox" data-check="s3-1" />
+              <span>
+                <span class="pg-check-title">大改动先用一次性原型（Prototype）或接口草图做对比</span>
+                <span class="pg-check-note">能靠跑一个小实验决定的分叉，绝不靠写千字文档开会猜。</span>
+              </span>
+            </label>
+            <label class="pg-check-item">
+              <input type="checkbox" data-check="s3-2" />
+              <span>
+                <span class="pg-check-title">状态机、并发重试等测试难覆盖的区域，试水 TLA+ 与状态图可视化</span>
+                <span class="pg-check-note">把代码背后隐含的状态流转画出来审，比逐行看锁和标志位靠谱得多。</span>
+              </span>
+            </label>
+            <label class="pg-check-item">
+              <input type="checkbox" data-check="s3-3" />
+              <span>
+                <span class="pg-check-title">内环跑稳之后，再开独立 Worktree 多路并行或过夜自治</span>
+                <span class="pg-check-note">每个并行任务配齐“目标 + 验收脚本 + 决策日志 + 卡死退出条件”，绝不让无护栏的 Agent 裸奔。</span>
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <div class="pg-card-sand">
+          <h3>延伸阅读与一手来源</h3>
+          <p class="pg-muted-body">
+            想看浓缩文字专栏版与完整一手参考链接，可以阅读配套文章：<a href="/posts/pstack-poteto-guide/">《土豆姐与 pstack：AI 写代码快了百倍后，怎么敢信任它》</a>。
+          </p>
+        </div>
+      </section>
+
+      <div class="pg-pager">
+        <button class="pg-pager-btn" id="pgPrevBtn" type="button" disabled>← 已是开篇</button>
+        <span class="pg-num pg-pager-hint" id="pgPagerHint">破题：先理清头绪</span>
+        <button class="pg-pager-btn primary" id="pgNextBtn" type="button">下一章：底层心法 →</button>
+      </div>
+    </div>
+  </main>
+
+  <style is:global>
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --parchment: #1e1d1b;
+      --ivory: #272523;
+      --warm-sand: #2f2d2a;
+      --brand: #5cb883;
+      --brand-light: #72cb97;
+      --brand-tint: rgba(92, 184, 131, 0.14);
+      --near-black: #f2f0ea;
+      --dark-warm: #eceae3;
+      --olive: #b5b1a7;
+      --stone: #918d83;
+      --line: #383531;
+      --line-faint: #312e2b;
+      --night: #161513;
+    }
+    :root[data-theme="light"] {
+      color-scheme: light;
+      --parchment: #fbfaf6;
+      --ivory: #fefdfb;
+      --warm-sand: #ebe9e1;
+      --brand: #1a6840;
+      --brand-light: #317b52;
+      --brand-tint: #ecf4ee;
+      --near-black: #363433;
+      --dark-warm: #3d3d3a;
+      --olive: #504e49;
+      --stone: #6b6a64;
+      --line: #e4e1d6;
+      --line-faint: #efede5;
+      --night: #1e1d1b;
+    }
+
+    .pstack-guide {
+      width: min(calc(100% - 2 * var(--inset)), var(--page));
+      margin: 0 auto 72px;
+    }
+    .pstack-guide button,
+    .pstack-guide input {
+      font-family: var(--sans);
+      letter-spacing: 0;
+    }
+    .pstack-guide code {
+      overflow-wrap: anywhere;
+    }
+    .pstack-guide .pg-num {
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0;
+      font-size: 14px;
+      color: var(--stone);
+    }
+
+    /* Chapter control bar */
+    .pstack-guide .pg-toolbar {
+      max-width: var(--measure);
+      margin: 0 auto 28px;
+      background: var(--ivory);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 12px 16px;
+    }
+    .pstack-guide .pg-toolbar-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .pstack-guide .pg-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--near-black);
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+    .pstack-guide .pg-orbit {
+      position: relative;
+      display: inline-block;
+      width: 14px;
+      height: 10px;
+    }
+    .pstack-guide .pg-dot {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 5px;
+      height: 5px;
+      border-radius: 999px;
+      background: var(--brand);
+      margin: -2.5px 0 0 -2.5px;
+      animation: pg-orbit-dot 14s linear infinite;
+    }
+    @keyframes pg-orbit-dot {
+      0% { transform: translate(-4px, 0); }
+      25% { transform: translate(0, -3px); }
+      50% { transform: translate(4px, 0); }
+      75% { transform: translate(0, 3px); }
+      100% { transform: translate(-4px, 0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .pstack-guide .pg-dot { animation: none; }
+    }
+
+    .pstack-guide .pg-tabs {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      flex-wrap: wrap;
+    }
+    .pstack-guide .pg-tab {
+      border: 0;
+      background: transparent;
+      color: var(--olive);
+      font-size: 14px;
+      line-height: 1.25;
+      padding: 6px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background-color 0.16s ease, color 0.16s ease;
+    }
+    .pstack-guide .pg-tab:hover {
+      background: var(--warm-sand);
+      color: var(--near-black);
+    }
+    .pstack-guide .pg-tab[aria-selected="true"] {
+      background: var(--brand-tint);
+      color: var(--brand);
+      font-weight: 600;
+    }
+    .pstack-guide .pg-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .pstack-guide .pg-link-btn,
+    .pstack-guide .pg-theme-btn {
+      border: 1px solid var(--line);
+      background: var(--parchment);
+      color: var(--olive);
+      font-size: 14px;
+      line-height: 1.2;
+      padding: 5px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+      text-decoration: none;
+      letter-spacing: 0;
+      transition: background-color 0.16s ease, color 0.16s ease;
+    }
+    .pstack-guide .pg-link-btn:hover,
+    .pstack-guide .pg-theme-btn:hover {
+      background: var(--warm-sand);
+      color: var(--near-black);
+    }
+
+    .pstack-guide .pg-ladder {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--line-faint);
+      font-size: 14px;
+      color: var(--stone);
+      letter-spacing: 0;
+    }
+    .pstack-guide .pg-scale {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .pstack-guide .pg-pill {
+      padding: 2px 9px;
+      border-radius: 999px;
+      background: var(--warm-sand);
+      color: var(--olive);
+      font-size: 14px;
+    }
+    .pstack-guide .pg-pill.active {
+      background: var(--brand-tint);
+      color: var(--brand);
+      font-weight: 600;
+    }
+    .pstack-guide .pg-progress {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .pstack-guide .pg-track {
+      width: 104px;
+      height: 4px;
+      border-radius: 999px;
+      background: var(--warm-sand);
+      overflow: hidden;
+    }
+    .pstack-guide .pg-fill {
+      height: 100%;
+      background: var(--brand);
+      transition: width 0.25s ease;
+    }
+
+    /* Stage */
+    .pstack-guide .pg-stage {
+      max-width: var(--measure);
+      margin-inline: auto;
+    }
+    .pstack-guide .pg-panel {
+      display: none;
+    }
+    .pstack-guide .pg-panel.is-active {
+      display: block;
+    }
+    .pstack-guide .pg-head {
+      margin-bottom: 24px;
+    }
+    .pstack-guide .pg-eyebrow {
+      margin-bottom: 10px;
+      color: var(--brand);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0;
+    }
+    .pstack-guide .pg-head h1 {
+      margin: 0 0 12px;
+    }
+    .pstack-guide .pg-lede {
+      color: var(--olive);
+      margin: 0;
+    }
+    .pstack-guide .pg-section {
+      margin-top: 32px;
+    }
+    .pstack-guide .pg-section h2,
+    .pstack-guide .pg-panel > h2 {
+      margin: 0 0 10px;
+    }
+    .pstack-guide .pg-muted {
+      font-size: 15px;
+      color: var(--olive);
+      margin-bottom: 10px;
+    }
+    .pstack-guide .pg-muted-body {
+      font-size: 15px;
+      margin: 0;
+    }
+    .pstack-guide .pg-stone-note {
+      font-size: 14px;
+      color: var(--stone);
+      margin: 8px 0 0;
+    }
+
+    /* Cards & Grids */
+    .pstack-guide .pg-card {
+      background: var(--ivory);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin: 14px 0;
+    }
+    .pstack-guide .pg-card h3,
+    .pstack-guide .pg-card-sand h3 {
+      margin: 0 0 8px;
+    }
+    .pstack-guide .pg-card p:last-child,
+    .pstack-guide .pg-card-sand p:last-child {
+      margin-bottom: 0;
+    }
+    .pstack-guide .pg-card-sand {
+      background: var(--warm-sand);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin: 16px 0;
+    }
+    .pstack-guide .pg-grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin: 14px 0;
+    }
+    .pstack-guide .pg-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin: 16px 0;
+    }
+    .pstack-guide .pg-grid-3 .pg-card {
+      margin: 0;
+    }
+
+    /* Segmented buttons */
+    .pstack-guide .pg-seg-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 12px 0 14px;
+    }
+    .pstack-guide .pg-seg-btn {
+      border: 1px solid var(--line);
+      background: var(--ivory);
+      color: var(--olive);
+      font-size: 15px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    }
+    .pstack-guide .pg-seg-btn:hover {
+      background: var(--warm-sand);
+      color: var(--near-black);
+    }
+    .pstack-guide .pg-seg-btn.is-active {
+      background: var(--brand);
+      border-color: var(--brand);
+      color: #fbfaf6;
+    }
+    :root[data-theme="dark"] .pstack-guide .pg-seg-btn.is-active {
+      color: #161513;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) .pstack-guide .pg-seg-btn.is-active {
+        color: #161513;
+      }
+    }
+
+    /* Paradox cards */
+    .pstack-guide .pg-paradox-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .pstack-guide .pg-paradox-item {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--ivory);
+      overflow: hidden;
+    }
+    .pstack-guide .pg-paradox-trigger {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 15px 18px;
+      border: 0;
+      background: transparent;
+      color: var(--near-black);
+      font-size: 16px;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      letter-spacing: 0.01em;
+    }
+    .pstack-guide .pg-paradox-trigger:hover {
+      background: var(--warm-sand);
+    }
+    .pstack-guide .pg-badge {
+      flex-shrink: 0;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--brand);
+      background: var(--brand-tint);
+      padding: 2px 10px;
+      border-radius: 999px;
+      letter-spacing: 0;
+    }
+    .pstack-guide .pg-paradox-body {
+      display: none;
+      padding: 0 18px 16px;
+      border-top: 1px solid var(--line-faint);
+      font-size: 15px;
+      line-height: 1.75;
+    }
+    .pstack-guide .pg-paradox-item.is-open .pg-paradox-body {
+      display: block;
+    }
+    .pstack-guide .pg-split {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .pstack-guide .pg-box {
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: var(--parchment);
+      border: 1px solid var(--line);
+      font-size: 15px;
+    }
+    .pstack-guide .pg-box.is-good {
+      background: var(--brand-tint);
+      border-color: var(--brand);
+    }
+    .pstack-guide .pg-box-label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--stone);
+      letter-spacing: 0;
+    }
+    .pstack-guide .pg-box.is-good .pg-box-label {
+      color: var(--brand);
+    }
+
+    /* Inverted Pyramid */
+    .pstack-guide .pg-pyramid {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      margin: 14px 0 16px;
+    }
+    .pstack-guide .pg-pyr-tier {
+      border: 1px solid var(--line);
+      background: var(--ivory);
+      color: var(--near-black);
+      border-radius: 10px;
+      padding: 12px 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      text-align: left;
+      transition: background-color 0.16s ease, border-color 0.16s ease;
+    }
+    .pstack-guide .pg-pyr-tier:hover {
+      background: var(--warm-sand);
+    }
+    .pstack-guide .pg-pyr-tier.is-active {
+      background: var(--brand-tint);
+      border-color: var(--brand);
+    }
+    .pstack-guide .pg-pyr-tier[data-tier="1"] { width: 100%; }
+    .pstack-guide .pg-pyr-tier[data-tier="2"] { width: 84%; }
+    .pstack-guide .pg-pyr-tier[data-tier="3"] { width: 66%; }
+    .pstack-guide .pg-pyr-tier[data-tier="4"] { width: 50%; }
+    .pstack-guide .pg-pyr-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--near-black);
+    }
+    .pstack-guide .pg-pyr-tier.is-active .pg-pyr-title {
+      color: var(--brand);
+    }
+    .pstack-guide .pg-pyr-sub {
+      font-size: 14px;
+      color: var(--stone);
+      white-space: nowrap;
+    }
+
+    /* 4-layer stack */
+    .pstack-guide .pg-arch-stack {
+      display: grid;
+      gap: 8px;
+      margin: 14px 0 16px;
+    }
+    .pstack-guide .pg-arch-layer {
+      display: grid;
+      grid-template-columns: 96px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+      padding: 13px 16px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--ivory);
+      cursor: pointer;
+      text-align: left;
+      transition: background-color 0.16s ease, border-color 0.16s ease;
+    }
+    .pstack-guide .pg-arch-layer:hover {
+      background: var(--warm-sand);
+    }
+    .pstack-guide .pg-arch-layer.is-active {
+      background: var(--brand-tint);
+      border-color: var(--brand);
+    }
+    .pstack-guide .pg-arch-num {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--brand);
+    }
+    .pstack-guide .pg-arch-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--near-black);
+    }
+    .pstack-guide .pg-arch-hint {
+      font-size: 14px;
+      color: var(--stone);
+    }
+    .pstack-guide .pg-skill-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .pstack-guide .pg-skill-card {
+      padding: 13px 15px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--parchment);
+    }
+    .pstack-guide .pg-skill-desc {
+      font-size: 15px;
+      color: var(--olive);
+      line-height: 1.65;
+    }
+
+    /* Stepper */
+    .pstack-guide .pg-stepper {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 6px;
+      margin: 14px 0 16px;
+    }
+    .pstack-guide .pg-step-btn {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--ivory);
+      color: var(--olive);
+      padding: 10px 8px;
+      cursor: pointer;
+      text-align: center;
+      font-size: 14px;
+      line-height: 1.35;
+      transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    }
+    .pstack-guide .pg-step-btn:hover {
+      background: var(--warm-sand);
+      color: var(--near-black);
+    }
+    .pstack-guide .pg-step-btn.is-active {
+      background: var(--brand-tint);
+      border-color: var(--brand);
+      color: var(--brand);
+      font-weight: 600;
+    }
+    .pstack-guide .pg-step-idx {
+      display: block;
+      font-size: 14px;
+      color: var(--stone);
+      margin-bottom: 2px;
+    }
+    .pstack-guide .pg-step-btn.is-active .pg-step-idx {
+      color: var(--brand);
+    }
+
+    /* Chips */
+    .pstack-guide .pg-chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      margin: 10px 0;
+      font-size: 14px;
+      letter-spacing: 0;
+    }
+    .pstack-guide .pg-chip {
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: var(--warm-sand);
+      color: var(--near-black);
+    }
+    .pstack-guide .pg-chip.is-brand {
+      background: var(--brand-tint);
+      color: var(--brand);
+      font-weight: 600;
+    }
+
+    /* Checklist */
+    .pstack-guide .pg-check-group {
+      margin-top: 8px;
+    }
+    .pstack-guide .pg-check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 4px;
+      border-top: 1px solid var(--line-faint);
+      cursor: pointer;
+    }
+    .pstack-guide .pg-check-item:first-child {
+      border-top: 0;
+    }
+    .pstack-guide .pg-check-item input[type="checkbox"] {
+      margin-top: 5px;
+      width: 16px;
+      height: 16px;
+      accent-color: var(--brand);
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+    .pstack-guide .pg-check-item.is-done .pg-check-title {
+      text-decoration: line-through;
+      color: var(--stone);
+    }
+    .pstack-guide .pg-check-title {
+      display: block;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--near-black);
+      margin-bottom: 2px;
+    }
+    .pstack-guide .pg-check-note {
+      display: block;
+      font-size: 14px;
+      color: var(--olive);
+      line-height: 1.6;
+    }
+    .pstack-guide .pg-meter-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+    .pstack-guide .pg-meter-bar {
+      height: 7px;
+      border-radius: 999px;
+      background: var(--warm-sand);
+      overflow: hidden;
+    }
+    .pstack-guide .pg-meter-fill {
+      height: 100%;
+      background: var(--brand);
+      transition: width 0.25s ease;
+    }
+
+    /* Pager */
+    .pstack-guide .pg-pager {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+    }
+    .pstack-guide .pg-pager-btn {
+      border: 1px solid var(--line);
+      background: var(--ivory);
+      color: var(--near-black);
+      font-size: 15px;
+      padding: 9px 18px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background-color 0.16s ease, border-color 0.16s ease;
+    }
+    .pstack-guide .pg-pager-btn:hover:not(:disabled) {
+      background: var(--warm-sand);
+    }
+    .pstack-guide .pg-pager-btn.primary {
+      background: var(--brand);
+      border-color: var(--brand);
+      color: #fbfaf6;
+    }
+    .pstack-guide .pg-pager-btn.primary:hover:not(:disabled) {
+      background: var(--brand-light);
+      border-color: var(--brand-light);
+    }
+    :root[data-theme="dark"] .pstack-guide .pg-pager-btn.primary {
+      color: #161513;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) .pstack-guide .pg-pager-btn.primary {
+        color: #161513;
+      }
+    }
+    .pstack-guide .pg-pager-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    @media (max-width: 660px) {
+      .pstack-guide .pg-grid-2,
+      .pstack-guide .pg-grid-3,
+      .pstack-guide .pg-split,
+      .pstack-guide .pg-skill-grid {
+        grid-template-columns: 1fr;
+      }
+      .pstack-guide .pg-stepper {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .pstack-guide .pg-pyr-tier[data-tier="2"],
+      .pstack-guide .pg-pyr-tier[data-tier="3"],
+      .pstack-guide .pg-pyr-tier[data-tier="4"] {
+        width: 100%;
+      }
+      .pstack-guide .pg-arch-layer {
+        grid-template-columns: 1fr;
+        gap: 4px;
+      }
+    }
+  </style>
+
+  <script is:inline>
+    (function () {
+      const CHAPTER_TITLES = [
+        '破题：先理清头绪',
+        '底层心法：信任倒金字塔',
+        '工具拆解：pstack 四层架构',
+        '全链路实战：5 步闭环',
+        '极限案例与最新演进',
+        '落地抄作业：3 阶段清单',
+      ];
+
+      const PYRAMID_DATA = {
+        '1': {
+          badge: '第 1 层 · 最宽 · 100% 确定性',
+          title: '代码库本身与 API / 架构设计',
+          why: 'Agent 永远倾向于抄仓库里现成的写法并走最短路径。把“正确的路”做成唯一好走的路、把“错误的路”从 API 上直接删掉，你就再也不用在 Code Review 里抓同类问题。',
+          example: 'Dune 框架直接在业务代码层禁用 React 的 useEffect，只允许框架底层使用；把 Electron 拆成 electron-main 和 electron-renderer 两个显式目录，天然传达边界。',
+          pstack: '对应 pstack：/architect（先定数据结构与接口边界）、principle-model-the-domain、principle-type-system-discipline。',
+        },
+        '2': {
+          badge: '第 2 层 · 较宽 · 确定性拦截',
+          title: '静态分析、类型、Lint、测试与形式化验证',
+          why: '文字规则被 AI 跳过时什么都不会发生，但编译器和 Lint 会立刻报红灯，直接把 AI 拦在提交前，而且报错信息还能充当精准的“下一轮提示词”。',
+          example: 'tibo.dog 用 .hot.ts 后缀配合 Lint 禁堆内存分配；包体积超过 124KB gzipped 直接让构建失败；用 TLA+ 检查多设备通知和剧情状态机。',
+          pstack: '对应 pstack：/correct、/create-verification-skill、/create-formal-verification-skill、/statechart。',
+        },
+        '3': {
+          badge: '第 3 层 · 较窄 · 软约束（按需极简）',
+          title: '散文式文字指导（AGENTS.md / Skills / 注释）',
+          why: '自然语言只该留给“机器确实判断不了、必须靠主观权衡”的规则。文字越长，模型注意力越稀释；一旦某条文字规则能转成 Lint 或架构约束，立刻从文档里删掉它。',
+          example: 'pstack 里的 /correct 要求维护一张“规则 ↔ 机器强制手段”对照表，每成功升级一条 Lint，就顺手删掉一条旧文档规则。',
+          pstack: '对应 pstack：/poteto-mode、24 条精简 Principles、/unslop、/no-comments。',
+        },
+        '4': {
+          badge: '第 4 层 · 最窄 · 不可扩展',
+          title: '人工 Code Review（只审高杠杆决策与证据）',
+          why: '一天合入几百个 PR 时，人类不可能逐行细读代码。人的精力必须从“当人肉 Linter 抓低级错”解放出来，收口到两件事：审产品意图对齐 + 审运行录屏/状态图等验证产物。',
+          example: '她在做 tibo.dog 时，约 80% 的时间都花在亲自试玩体验、把反馈喂给 Bot，而不是逐行盯 Diff。',
+          pstack: '对应 pstack：/teach（让 AI 讲清权衡）、/statechart（可视化意图对齐）、/show-me-your-work（决策审计日志）。',
+        },
+      };
+
+      const SCENARIO_DATA = {
+        timer: {
+          bad: '在 AGENTS.md 写一行：“请不要滥用 setTimeout / requestAnimationFrame，注意避免 GC 卡顿。” → 两周后新开的 Agent 依然顺手写了一个 setTimeout，还贴心加了句注释说“临时等待渲染完成”。',
+          steps: [
+            ['1. 架构根除', '消除命令式代码与声明式 UI 的直接冲突，提供统一的生命周期/调度原语。'],
+            ['2. Lint 拦截', '加一条自定义 Lint 规则禁止业务文件直接调用 setTimeout，并在报错文案里写死：“请改用 scheduler.afterFrame()，见 src/runtime/scheduler.ts”。'],
+            ['3. 历史验证', '先拿这条 Lint 去扫上个月出问题的那次 Commit，确认能红灯拦住再合入。'],
+          ],
+        },
+        import: {
+          bad: '在文档里写：“Renderer 线程不能引用 Main 线程模块，否则会卡死界面。” → Agent 只打开了当前文件，根本没记起文档第 47 条，顺手自动补全了一个跨层 import。',
+          steps: [
+            ['1. 目录显式化', '把顶层目录直接命名为 electron-main/ 与 electron-renderer/，路径本身就是最强上下文。'],
+            ['2. 依赖图硬禁', '在依赖分析器和 Lint 里彻底禁止 renderer 导入 main，任何跨界引用秒报错。'],
+            ['3. 清理文档', '把 AGENTS.md 里对应的口头警告删掉——既然已经写不进去了，就没必要再占上下文 Token。'],
+          ],
+        },
+        comment: {
+          bad: 'PR 评审里口头回复：“以后别写解释补丁的废话注释。” → 下一轮对话 AI 毫无记忆，遇到难修的边界又写了一个 // HACK: workaround for race condition。',
+          steps: [
+            ['1. 自动化扫荡', '提交前跑 /no-comments，拉起只读评审子 Agent Comment Sicko 逐条审判注释。'],
+            ['2. 约束转代码', '凡是写着 // DO NOT REMOVE 的注释，强制改写成类型约束、断言测试或 Lint；无意义解释一律删。'],
+            ['3. 严禁逃生舱', '默认把 eslint-disable / @ts-ignore 视为可疑代码，除非附带原因、过期日期和人工批准。'],
+          ],
+        },
+      };
+
+      const ARCH_DATA = [
+        {
+          title: '第 1 层：单入口路由（/poteto-mode）',
+          summary: '技能一多，用户根本记不住该调哪个。所以 pstack 的第一条设计铁律是：别让用户学工作流，让总路由根据任务自动选剧本。',
+          bullets: [
+            '<strong>你只管写 5 件事（通常 1–3 句话）：</strong>① 想解决什么目标；② 怎样算完成（能判真假）；③ 你要看什么证据；④ 你已知的线索；⑤ 真实约束（如“先复现再改”）。',
+            '<strong>配套入口：</strong><code>/setup-pstack</code> 用来选不同角色对应的模型与推理预算；拿不准怎么问时找 <code>/poteto-help</code>，它会给你拼好一段可直接复制的提示词。',
+            '<strong>个性化扩展：</strong>跑 <code>/automate-me</code> 能扫描你最近的对话记录，自动把你的个人习惯做成 <code>/你的名字-mode</code>，底层继续复用 pstack。',
+          ],
+        },
+        {
+          title: '第 2 层：22 套场景剧本（Playbooks）',
+          summary: '匹配到任务类型后，Agent 第一动作不是写代码，而是把对应剧本的步骤原封不动复制到 TodoList 里，变成明面上的硬检查清单（想跳过某步必须写明 skip 理由）。',
+          bullets: [
+            '<strong>探索与排查类（6 套）：</strong><code>investigation</code>（只读摸底）、<code>bug-fix</code>（复现→二分定位→证据修复）、<code>perf-issue</code>、<code>hillclimb</code>（盯单一指标循环爬坡）、<code>runtime-forensics</code>、<code>trace-forensics</code>。',
+            '<strong>研发与设计类（5 套）：</strong><code>feature</code>（先定数据结构）、<code>refactoring</code>、<code>prototype</code>（一次性原型对比）、<code>visual-parity</code>（像素级基线对比）、<code>multi-phase-plan</code>。',
+            '<strong>交付与无人值守类（8 套）：</strong><code>opening-a-pr</code>（所有剧本收尾必调）、<code>babysit</code>（值守 PR 直到可合并）、<code>shipping</code>（绿灯栈自底向上合入）、<code>autonomous-run</code>、<code>autopilot-full</code>、<code>autopilot-stack</code>、<code>session-pickup</code>、<code>pause-safely</code>。',
+            '<strong>元维护类（3 套）：</strong><code>authoring-a-skill</code>、<code>eval</code>（盲测技能改动效果）、<code>worktree-cleanup</code>。',
+          ],
+        },
+        {
+          title: '第 3 层：35 个高频功能技能 + 2 个专属子 Agent',
+          summary: '平时大多由剧本按步自动触发，你只需要认识这 4 组最核心的技能，以及为什么要有 2 个专用子 Agent：',
+          groups: {
+            摸底对齐: [
+              ['/in-your-own-words', '动工前先用大白话复述目标和底层问题，防止理解跑偏。'],
+              ['/how', '并发摸清一个子系统当前是怎么跑起来的。'],
+              ['/why', '不猜代码，去查 Git、PR 评论、工单和文档，还原“当初为什么这么写”。'],
+              ['/teach', '串联 how + why，用图表把方案权衡讲给你听，顺手治好 AI 不读代码瞎拍板的毛病。'],
+              ['/recall', '从近期聊天记录捞回上下文，开新窗口也不用从零喂背景。'],
+            ],
+            设计探索: [
+              ['/architect', '跨函数边界前先定调用方草图、类型和模块形态，画错了就推倒重来。'],
+              ['/arena', '同题多路竞赛：让多个模型各写一版方案，交叉评判后嫁接最强部分。'],
+              ['/swarm', '把大任务切成多片，派多个子 Agent 并行执行，最后汇总成一份报告。'],
+              ['/reframe & /sharpen', '需求模糊时帮你翻译成行话、补齐专家视角盲区并打磨提示词。'],
+            ],
+            编码清理: [
+              ['/tdd', '有低成本本地测试时，先写失败测试再写实现。'],
+              ['/no-comments', '调用只读子 Agent Comment Sicko，清掉烂注释，把重要约束改写成类型/Lint。'],
+              ['/unslop & /technical-writing', '去掉 AI 翻译腔和废话；按 Diátaxis 框架写清晰的 README 与 PR 说明。'],
+            ],
+            验证与进化: [
+              ['/create-verification-skill', '给项目生成一套能像真人一样驱动应用并抓证据的本地验证技能（含功能地图）。'],
+              ['/create-formal-verification-skill', '针对并发、重试、状态机，用 TLA+ / Lean 等工具验证普通测试测不到的死角。'],
+              ['/statechart', '把 TLA+ 模型画成人类一眼看懂的 Mermaid 状态图，标出违规路径。'],
+              ['/correct & /reflect', '翻历史提交把重复踩坑升格为架构/类型/Lint 铁律；沉淀长任务经验。'],
+            ],
+          },
+          agentsNote: '<strong>2 个专属子 Agent：</strong><code>poteto-agent</code> 是委派干活的标准外壳，启动前强制完整读取 poteto-mode 和原则索引（防止普通通用子 Agent 脱离规范跑偏）；<code>comment-sicko</code> 是只读的铁面注释审查员，专治 AI 滥写补丁注释。',
+        },
+        {
+          title: '第 4 层：24 条工程原则（Principles）',
+          summary: '每条原则是一个独立短文件，分为 5 大类。它们不规定死板步骤，而是定义工程品味和纠偏口令：',
+          principles: [
+            ['核心思维（10 条）', 'Laziness Protocol（偏向删除与最小改动）、Foundational Thinking（先定数据结构）、Redesign from First Principles、Attack the Premise（连错两次必证伪前提）、Subtract Before You Add、Minimize Reader Load、Outcome-Oriented Execution、Experience First、Exhaust the Design Space、Build the Lever（做工具而不是手工干）。'],
+            ['架构纪律（6 条）', 'Model the Domain（用状态机/类型替代散乱 if-else）、Boundary Discipline（边界校验、内部纯净）、Type System Discipline（让非法状态无法表示）、Make Operations Idempotent、Migrate Callers Then Delete Legacy APIs、Separate Before Serializing Shared State（先消除共享，别急着加锁）。'],
+            ['验证铁律（5 条）', 'Prove It Works（用真产物证明，不信“能编译”）、Fix Root Causes（治根因不打补丁）、Sequence Verifiable Units（小步可验证提交）、Test Behavior Not Implementation、Explain the Number（先查清指标瓶颈再报数据）。'],
+            ['委派与自治（2 条）', 'Guard the Context Window（大活派子 Agent，主线程只留摘要）、Never Block on the Human（可逆操作先干再给结果，不可逆才停下问）。'],
+            ['元原则（1 条）', 'Encode Lessons in Structure（同一提醒写第二遍时，立刻改成 Lint/类型/脚本，而不是再写文字）。'],
+          ],
+        },
+      ];
+
+      const WALKTHROUGH = {
+        bug: [
+          {
+            title: 'Step 1 · 间接提需求：不喂人类猜想',
+            prompt: '/poteto-mode 读一下这条报错工单：任务重试时用户会收到两条重复通知。先用你自己的话复述底层问题是什么，然后先复现、再修复并证明有效。',
+            inside: '触发 <code>/in-your-own-words</code> + 匹配 <code>bug-fix</code> 剧本，把 6 个标准步骤原样写入 TodoList。',
+            output: 'Agent 先压噪复述：问题出在幂等键或重试时序，而不是盲目跟着你的猜测改某个函数。你在它写第一行代码前就确认了方向没歪。',
+          },
+          {
+            title: 'Step 2 · 摸清前世今生：读代码 + 查历史',
+            prompt: '（剧本自动执行，无需你手动敲命令）',
+            inside: '并发调 <code>/how</code> 追踪通知发送链路，同时调 <code>/why</code> 查 Git 历史和旧 PR，确认当初为什么没加去重、有没有历史兼容包袱。',
+            output: '一份带代码路径和历史提交引用的简报。先在真实环境跑出一个<strong>稳定复现重复通知的失败样例</strong>。',
+          },
+          {
+            title: 'Step 3 · 二分根因 & 定数据结构',
+            prompt: '（若涉及跨模块接口调整，自动进入架构草图）',
+            inside: '按 <code>Fix Root Causes</code> 原则用运行时日志二分排除假说；跨函数边界时走 <code>/architect</code>，用强类型把“已发送/未发送”状态显式建模，而不是顺手加个 <code>if (seen)</code> 补丁。',
+            output: '每一行改动都能追溯到运行时证据；被证伪的猜想代码立刻回滚，不留半点多余防御。',
+          },
+          {
+            title: 'Step 4 · 双重实证验收（重头戏）',
+            prompt: '（触发 Prove It Works + 形式化状态检查）',
+            inside: '① 运行时实证：在原复现表面重跑真实重试流程，拿到确凿日志/输出；② 形式化验证：用 <code>/create-formal-verification-skill</code> + <code>/statechart</code> 对“重试 + 并发通知”状态机跑 TLC 模型检查。',
+            output: '交付物不是一句“我修好了”，而是：① 先红后绿的复现提交记录；② 真实运行证据；③ 一张确认无重复投递路径的状态图。',
+          },
+          {
+            title: 'Step 5 · 清理、窄 PR 与防复发',
+            prompt: '（收尾自动触发 /no-comments 与 opening-a-pr）',
+            inside: '<code>Comment Sicko</code> 扫掉多余注释；按“先失败复现、后根因修复”的顺序整理小颗粒 Commit 打开窄 PR；如果同类幂等错以前也犯过，跑 <code>/correct</code> 补一条静态检查。',
+            output: '一个自证清白、审阅极快的窄 PR，加上一条让未来所有 Agent 永久免疫同类 Bug 的护栏。',
+          },
+        ],
+        feature: [
+          {
+            title: 'Step 1 · 召回记忆 + 明确终局目标',
+            prompt: '/recall 我过去 7 天修列表闪烁和性能的记录。目标：设计一个从根源消灭闪烁的新虚拟化引擎，不要先写长篇 Plan。',
+            inside: '触发 <code>/recall</code> 捞回近期上下文，结合 <code>feature</code> 剧本，跳过空洞的纸面计划。',
+            output: 'Agent 带着过去 7 天的踩坑记忆进入状态，零重复解释。',
+          },
+          {
+            title: 'Step 2 · 摸透旧实现与设计权衡',
+            prompt: '用 /how 和 /why 摸清当前虚拟列表为什么会抖动。',
+            inside: '<code>/how</code> 梳理测量、滚动与回收机制；<code>/why</code> 查清老架构妥协的历史原因。',
+            output: '定位到核心矛盾（例如异步测量与同步渲染帧打架），避免新引擎重蹈覆辙。',
+          },
+          {
+            title: 'Step 3 · README 驱动 + 多原型竞技',
+            prompt: '先用 /technical-writing 写一篇“开发者怎么用这个新包”的教程；拿不准的滚动方案用原型剧本做 2 个可跑变体对比。',
+            inside: '用教程倒推极简调用方 API；<code>/architect</code> + <code>/arena</code> 跨模型画接口草图；<code>prototype</code> 剧本挂出切换器跑真实帧率。',
+            output: '不是猜哪个方案好，而是直接看两套原型的实测布局与耗时；再用 <code>/teach</code> 让 AI 讲透为什么新方案更优。',
+          },
+          {
+            title: 'Step 4 · 真机跑通 + 数学证明 + 指标审计',
+            prompt: '（自动调用验证技能、Lean 证明与 /benchmark-checklist）',
+            inside: '① 用项目的验证 CLI + Feature Map 驱动真实 UI 录屏；② 对核心虚拟化索引算法用 Lean 证明不会出现越界抖动；③ 用 <code>/benchmark-checklist</code> 核验性能提速数字不是测偏了。',
+            output: '端到端录屏 + 算法属性证明 + 经得起拷问的性能对比表。',
+          },
+          {
+            title: 'Step 5 · 删旧留新，不留兼容垃圾',
+            prompt: '（遵循 Migrate Callers Then Delete Legacy APIs）',
+            inside: '按小步可验证单元（<code>Sequence Verifiable Units</code>）分批迁移调用方并直接删掉老实现；<code>/no-comments</code> 清理注释；若项目留了临时大计划文件，完工后直接删除免得误导后来的 Agent。',
+            output: '干净的新底座上线，老旧实现清零，代码库反而比改造前更轻。',
+          },
+        ],
+      };
+
+      const SHOWCASE = {
+        tibo: {
+          title: 'tibo.dog —— 4 天业余时间、约 1,150 个 PR 做出 2.5D 像素生存游戏',
+          intro: '2026 年 11 月 1 日发布，花 5.99 美元买域名，用 Grok Bot + Cursor + pstack 搭建，可直接嵌在 X 信息流卡片（245px）到全屏 60fps 运行。',
+          items: [
+            ['文件路径即性能契约（.hot.ts）', '凡是每帧 / 每 Tick 执行的热路径统一命名为 .hot.ts，配套 Lint 严禁在里面分配堆内存（禁止对象字面量、闭包、new），从根源杜绝 GC 掉帧。'],
+            ['每抓一个 Bug 就加一条 Lint', '1,150 个 PR 没乱套的秘诀：发现坏模式立刻让 Bot 写一条拦截规则；代码注释被 Lint 全面禁止，写不清就改变量名或写测试。'],
+            ['TLA+ 状态机护航', '剧情、过场演出、升级自动选卡与暂停/失焦组合全用 TLA+ 建模并用 /statechart 可视化，揪出了多个肉眼极难发现的状态竞争 Bug。'],
+            ['硬预算与全代码化闭环', '首包超过 124KB gzipped 直接构建失败；没有外部音频和图片文件，音乐由自研 Game Boy 芯片代码合成、像素画全由代码生成；模拟 100% 确定性（服务端重放校验高分），甚至让 Headless Bot 自动打游戏调难度生存率。'],
+          ],
+        },
+        dune: {
+          title: 'Dune & Grok Bot —— 团队月合入 11,000 PR，回滚率稳在约 0.5%',
+          intro: 'SpaceXSI 内部构建的桌面客户端框架（类似 Electron 版 Next.js），把多年做桌面应用的血泪教训全部编码成框架硬约束。',
+          items: [
+            ['业务代码直接禁掉 useEffect', '凡是需要“极高微妙直觉”才能用对的 API，Agent 必然用成垃圾。团队干脆在业务层彻底禁用 useEffect，只允许在框架封装好的原语内部使用。'],
+            ['目录名 + 依赖分析硬隔离进程', '吸取 Cursor 时期渲染层误引主进程导致卡顿的教训，直接设 electron-main 与 electron-renderer 顶层目录，由依赖图 Lint 物理封死跨界导入。'],
+            ['报错信息自带“修复指南”', 'Lint 报错不只是冷冰冰地红灯拒绝，而是明确指路该换哪个文件、哪个函数去治根因，让 Agent 一轮就能自动修对。'],
+            ['外环自动 Fuzz 找虫并自动合入', '正因为内环足够硬，每发一个新版本，Grok Bot 都会自动起项目像真人一样乱点整个应用找 Bug、开修复 PR 并走完验证自动合并，性能反而越迭代越快。'],
+          ],
+        },
+      };
+
+      let currentChapter = 0;
+      let currentSkillGroup = '摸底对齐';
+      let currentWalkCase = 'bug';
+      let currentWalkStep = 0;
+
+      const tabs = Array.from(document.querySelectorAll('.pg-tab'));
+      const panels = Array.from(document.querySelectorAll('.pg-panel'));
+      const prevBtn = document.getElementById('pgPrevBtn');
+      const nextBtn = document.getElementById('pgNextBtn');
+      const progressText = document.getElementById('pgProgressText');
+      const progressFill = document.getElementById('pgProgressFill');
+      const pagerHint = document.getElementById('pgPagerHint');
+      const pillMacro = document.getElementById('pg-pill-macro');
+      const pillMeso = document.getElementById('pg-pill-meso');
+      const pillMicro = document.getElementById('pg-pill-micro');
+
+      function setChapter(idx, shouldScroll) {
+        currentChapter = Math.max(0, Math.min(5, idx));
+        tabs.forEach((btn, i) => btn.setAttribute('aria-selected', i === currentChapter ? 'true' : 'false'));
+        panels.forEach((el, i) => el.classList.toggle('is-active', i === currentChapter));
+
+        const pct = ((currentChapter + 1) / 6) * 100;
+        progressText.textContent = '第 ' + (currentChapter + 1) + ' / 6 章';
+        progressFill.style.width = pct + '%';
+
+        const level = panels[currentChapter].getAttribute('data-level');
+        pillMacro.classList.toggle('active', level === 'macro');
+        pillMeso.classList.toggle('active', level === 'meso');
+        pillMicro.classList.toggle('active', level === 'micro');
+
+        prevBtn.disabled = currentChapter === 0;
+        prevBtn.textContent = currentChapter > 0 ? '← ' + CHAPTER_TITLES[currentChapter - 1].split('：')[0] : '← 已是开篇';
+        nextBtn.textContent = currentChapter === 5 ? '回到第 01 章 ↺' : '下一章：' + CHAPTER_TITLES[currentChapter + 1].split('：')[0] + ' →';
+        pagerHint.textContent = CHAPTER_TITLES[currentChapter];
+        if (shouldScroll) window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      tabs.forEach((btn) => btn.addEventListener('click', () => setChapter(Number(btn.dataset.chapter), true)));
+      prevBtn.addEventListener('click', () => setChapter(currentChapter - 1, true));
+      nextBtn.addEventListener('click', () => setChapter(currentChapter === 5 ? 0 : currentChapter + 1, true));
+
+      const themeToggle = document.getElementById('pgThemeToggle');
+      function isDarkNow() {
+        const attr = document.documentElement.getAttribute('data-theme');
+        if (attr === 'dark') return true;
+        if (attr === 'light') return false;
+        return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      }
+      function syncThemeBtn() {
+        themeToggle.textContent = isDarkNow() ? '切暖纸' : '切夜纸';
+      }
+      themeToggle.addEventListener('click', () => {
+        document.documentElement.setAttribute('data-theme', isDarkNow() ? 'light' : 'dark');
+        syncThemeBtn();
+      });
+      syncThemeBtn();
+
+      document.querySelectorAll('.pg-paradox-trigger').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const item = btn.closest('.pg-paradox-item');
+          const open = item.classList.toggle('is-open');
+          btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+          btn.querySelector('.pg-badge').textContent = open ? '点击收起' : '点击展开';
+        });
+      });
+
+      const pyramidDetail = document.getElementById('pgPyramidDetail');
+      function renderPyramid(tier) {
+        const d = PYRAMID_DATA[tier];
+        document.querySelectorAll('.pg-pyr-tier').forEach((b) => b.classList.toggle('is-active', b.dataset.tier === tier));
+        pyramidDetail.innerHTML =
+          '<div class="pg-eyebrow" style="margin-bottom:6px;">' + d.badge + '</div>' +
+          '<h3 style="font-size:21px;margin-bottom:10px;">' + d.title + '</h3>' +
+          '<p><strong>核心逻辑：</strong>' + d.why + '</p>' +
+          '<p><strong>真实落地例子：</strong>' + d.example + '</p>' +
+          '<p style="font-size:15px;color:var(--brand);margin-top:8px;margin-bottom:0;">' + d.pstack + '</p>';
+      }
+      document.querySelectorAll('.pg-pyr-tier').forEach((b) => b.addEventListener('click', () => renderPyramid(b.dataset.tier)));
+      renderPyramid('1');
+
+      const scenarioBox = document.getElementById('pgScenarioBox');
+      function renderScenario(key) {
+        const s = SCENARIO_DATA[key];
+        document.querySelectorAll('#pgScenarioBtns .pg-seg-btn').forEach((b) => b.classList.toggle('is-active', b.dataset.scene === key));
+        const stepsHtml = s.steps.map((item) => '<li style="margin:6px 0;"><strong>' + item[0] + '：</strong>' + item[1] + '</li>').join('');
+        scenarioBox.innerHTML =
+          '<div class="pg-split" style="margin-top:0;">' +
+            '<div class="pg-box"><span class="pg-box-label">普通做法（留在倒金字塔底层）</span><p style="margin:0;">' + s.bad + '</p></div>' +
+            '<div class="pg-box is-good"><span class="pg-box-label">土豆姐做法（沿倒金字塔往上焊死）</span><ul style="margin:0;padding-left:1.2em;">' + stepsHtml + '</ul></div>' +
+          '</div>';
+      }
+      document.querySelectorAll('#pgScenarioBtns .pg-seg-btn').forEach((b) => b.addEventListener('click', () => renderScenario(b.dataset.scene)));
+      renderScenario('timer');
+
+      const archDetail = document.getElementById('pgArchDetail');
+      function renderArch(layerIdx) {
+        const data = ARCH_DATA[layerIdx];
+        document.querySelectorAll('.pg-arch-layer').forEach((b) => b.classList.toggle('is-active', Number(b.dataset.layer) === layerIdx));
+        let html = '<h3 style="font-size:21px;margin-bottom:8px;">' + data.title + '</h3>';
+        html += '<p style="color:var(--olive);">' + data.summary + '</p>';
+        if (data.bullets) {
+          html += '<ul>' + data.bullets.map((t) => '<li style="margin:8px 0;">' + t + '</li>').join('') + '</ul>';
+        }
+        if (data.groups) {
+          const groupNames = Object.keys(data.groups);
+          html += '<div class="pg-seg-row" id="pgSkillGroupTabs">' + groupNames.map((g) =>
+            '<button class="pg-seg-btn' + (g === currentSkillGroup ? ' is-active' : '') + '" type="button" data-group="' + g + '">' + g + '</button>'
+          ).join('') + '</div>';
+          const cards = data.groups[currentSkillGroup].map((pair) =>
+            '<div class="pg-skill-card"><div style="margin-bottom:6px;"><code>' + pair[0] + '</code></div><div class="pg-skill-desc">' + pair[1] + '</div></div>'
+          ).join('');
+          html += '<div class="pg-skill-grid">' + cards + '</div>';
+          html += '<p style="margin-top:14px;margin-bottom:0;font-size:15px;color:var(--olive);">' + data.agentsNote + '</p>';
+        }
+        if (data.principles) {
+          html += '<div class="pg-paradox-list">' + data.principles.map((p) =>
+            '<div class="pg-skill-card"><strong style="display:block;margin-bottom:4px;color:var(--brand);">' + p[0] + '</strong><span class="pg-skill-desc">' + p[1] + '</span></div>'
+          ).join('') + '</div>';
+        }
+        archDetail.innerHTML = html;
+        archDetail.querySelectorAll('#pgSkillGroupTabs .pg-seg-btn').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            currentSkillGroup = btn.dataset.group;
+            renderArch(2);
+          });
+        });
+      }
+      document.querySelectorAll('.pg-arch-layer').forEach((b) => b.addEventListener('click', () => renderArch(Number(b.dataset.layer))));
+      renderArch(0);
+
+      const walkthroughDetail = document.getElementById('pgWalkthroughDetail');
+      function renderWalkthrough() {
+        const item = WALKTHROUGH[currentWalkCase][currentWalkStep];
+        document.querySelectorAll('#pgCaseToggle .pg-seg-btn').forEach((b) => b.classList.toggle('is-active', b.dataset.case === currentWalkCase));
+        document.querySelectorAll('#pgStepper .pg-step-btn').forEach((b) => b.classList.toggle('is-active', Number(b.dataset.step) === currentWalkStep));
+        walkthroughDetail.innerHTML =
+          '<h3 style="font-size:21px;margin-bottom:10px;">' + item.title + '</h3>' +
+          '<div style="font-size:14px;color:var(--stone);margin-bottom:4px;">人类给的提示词 / 动作</div>' +
+          '<pre><code>' + item.prompt + '</code></pre>' +
+          '<div class="pg-split">' +
+            '<div class="pg-box"><span class="pg-box-label">pstack 内部发生了什么</span><p style="margin:0;">' + item.inside + '</p></div>' +
+            '<div class="pg-box is-good"><span class="pg-box-label">这一步交付的硬结果</span><p style="margin:0;">' + item.output + '</p></div>' +
+          '</div>';
+      }
+      document.querySelectorAll('#pgCaseToggle .pg-seg-btn').forEach((b) => b.addEventListener('click', () => {
+        currentWalkCase = b.dataset.case;
+        renderWalkthrough();
+      }));
+      document.querySelectorAll('#pgStepper .pg-step-btn').forEach((b) => b.addEventListener('click', () => {
+        currentWalkStep = Number(b.dataset.step);
+        renderWalkthrough();
+      }));
+      renderWalkthrough();
+
+      const showcaseBox = document.getElementById('pgShowcaseBox');
+      function renderShowcase(key) {
+        const d = SHOWCASE[key];
+        document.querySelectorAll('#pgShowcaseBtns .pg-seg-btn').forEach((b) => b.classList.toggle('is-active', b.dataset.case === key));
+        const grid = d.items.map((pair) =>
+          '<div class="pg-skill-card"><strong style="display:block;margin-bottom:6px;color:var(--near-black);">' + pair[0] + '</strong><span class="pg-skill-desc">' + pair[1] + '</span></div>'
+        ).join('');
+        showcaseBox.innerHTML =
+          '<h3 style="font-size:21px;margin-bottom:6px;">' + d.title + '</h3>' +
+          '<p style="color:var(--olive);font-size:15px;">' + d.intro + '</p>' +
+          '<div class="pg-skill-grid">' + grid + '</div>';
+      }
+      document.querySelectorAll('#pgShowcaseBtns .pg-seg-btn').forEach((b) => b.addEventListener('click', () => renderShowcase(b.dataset.case)));
+      renderShowcase('tibo');
+
+      const STORAGE_KEY = 'sunsky-pstack-guide-checklist-v1';
+      const checkboxes = Array.from(document.querySelectorAll('.pstack-guide input[type="checkbox"][data-check]'));
+      const scoreLabel = document.getElementById('pgScoreLabel');
+      const scoreFill = document.getElementById('pgScoreFill');
+      const scoreAdvice = document.getElementById('pgScoreAdvice');
+
+      function updateScore() {
+        const total = checkboxes.length;
+        const done = checkboxes.filter((cb) => cb.checked).length;
+        const pct = Math.round((done / total) * 100);
+        scoreFill.style.width = pct + '%';
+        let stageText = '刚起步';
+        let advice = '先拿下第 1 阶段的 3 个习惯，不用改一行配置，今天就能把 AI 返工率打下来一半。';
+        if (done >= 3 && done < 6) {
+          stageText = '协作已顺手 · 准备建护栏';
+          advice = '你的提问方式已经到位，下一步把精力放到第 2 阶段：统一验证命令 + 功能地图 + 2 条高价值 Lint。';
+        } else if (done >= 6 && done < 9) {
+          stageText = '高信任内环成型';
+          advice = '你已经跑赢绝大多数 AI 编程团队了。接下来可以在关键状态机或并发模块试水形式化验证与多路并行。';
+        } else if (done === 9) {
+          stageText = '软件工厂就绪';
+          advice = '内环扎实、证据闭环，你已经具备让多 Agent 放心并行甚至过夜交付的基础设施。';
+        }
+        scoreLabel.textContent = '已完成 ' + done + ' / ' + total + ' 项 · ' + stageText;
+        scoreAdvice.textContent = advice;
+      }
+
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+        checkboxes.forEach((cb) => {
+          cb.checked = Boolean(saved[cb.dataset.check]);
+          cb.closest('.pg-check-item').classList.toggle('is-done', cb.checked);
+        });
+      } catch (e) {}
+      updateScore();
+
+      checkboxes.forEach((cb) => {
+        cb.addEventListener('change', () => {
+          const state = {};
+          checkboxes.forEach((item) => {
+            state[item.dataset.check] = item.checked;
+            item.closest('.pg-check-item').classList.toggle('is-done', item.checked);
+          });
+          try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+          } catch (e) {}
+          updateScore();
+        });
+      });
+    })();
+  </script>
+</Base>
