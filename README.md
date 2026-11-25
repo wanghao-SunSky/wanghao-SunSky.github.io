@@ -16,7 +16,7 @@ Chinese notes on AI Agent engineering: agent architecture, tool calling, agent m
 | 评测 | 评测设计、回归测试、可靠性，Harness Engineering |
 | Agent 安全 | 提示词注入、权限边界、谁的话算命令 |
 
-最新文章：[从 Anthropic 万亿上市说起：大模型的三条路线，和牌桌上真正该留下的三家公司](https://wanghao-sunsky.github.io/posts/anthropic-ipo-three-ai-routes/)。
+最新文章：[土豆姐与 pstack：AI 写代码快了百倍后，怎么敢信任它](https://wanghao-sunsky.github.io/posts/pstack-poteto-guide/)（附[互动图解导读页](https://wanghao-sunsky.github.io/guides/pstack/)）。
 
 文章列表见[网站首页](https://wanghao-sunsky.github.io/)。发现事实错误欢迎提 Issue，更正会写在文章末尾。
 
