@@ -492,3 +492,8 @@ A[发布准备 已完成] --> B[部署 正在做] --> C[线上核对 未开始]
 ## 2026-11-26 — 润色 pstack 专栏语感并补齐互动页术语浮卡与代码示例
 
 经 Gemini 4 Argon 按一线技术专栏语感重写 `content/posts/pstack-poteto-guide/index.md` 与 `src/pages/guides/pstack.astro` 文案，增补带修复提示的 ESLint 规则与 TypeScript 强类型代码示例，并在互动页新增 16 项跨领域术语的后端视角点击/悬停直译浮卡。
+
+
+## 2026-11-26 — 发布观点文章《写给二十来岁的自己：当“聪明”不再稀缺，我们该怎么不被大浪卷走？》
+
+围绕 AI 在数学推理与工程编码上的进展，借 P vs NP 的求解与验证视角拆解未来十年的通胀清单、稀缺清单与年轻人四条行动建议，新增 `content/posts/when-intelligence-is-no-longer-scarce/index.md`（路由 `/posts/when-intelligence-is-no-longer-scarce/`），补齐 OG 分享图与 README 入口，完成内容检查、字库子集化与 Astro 构建后发布上线。
